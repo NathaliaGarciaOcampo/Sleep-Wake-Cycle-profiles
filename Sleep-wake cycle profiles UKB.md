@@ -11,32 +11,35 @@ library(ggplot2)
 ## Figure 1: Standardized mean scores on 36 metrics as a function of the nine sleep-wake cycle profiles in the UKB accelerometer sub-study
 ##------------------------------------------------------------------------------------------------------------------------------------------##
 
-#1. Loading the data with the 36 metrics and 9 SWC clusters (profiles).
-Data <- read.csv("path/name.csv")  #For readers interested in the methodological details of clusters identification, the codes are available at: ""
+##Notes##
+#This script assumes a preprocessed dataset containing 36 accelerometer derived metrics and 9 sleep-wake cycle profiles (SWC).For readers interested in the methodological details of clusters (profiles) identification, the codes are available at: ""
 
-#Order the SWC profiles
+##1. Load data 
+Data <- read.csv("path/name.csv")
+
+##2. Define profile ordering
 Data$SWCprofiles_order <- factor(Data$SWCprofiles_UKB, 
                                           levels = c("RAR ++ PA ++", "RAR + PA + Sleep -","RAR + LIPA + Sleep +", "MVPA +",
                                                      "RAR - Chronotype --", "RAR - PA - Sleep +", "RAR - PA - Sleep --", "RAR - PA + Restless sleep",
                                                      "RAR -- PA -- Chronotype -"))
 
-#Scale the 36 metrics 
-vars_to_scale <- names(Data)[2:37] # Specific to our dataset
+##3. Scale the 36 accelerometer metrics 
+vars_to_scale <- names(Data)[2:37] # # Assumes metrics are columns 2–37, this is specific to our dataset
 scaled_data <- Data %>%
   select(all_of(vars_to_scale), SWCprofiles_UKB, SWCprofiles_order) %>%
   mutate(across(all_of(vars_to_scale), scale)) 
 
-#Compute mean z-scores per SWC profile
+##4. Compute mean z-scores by SWC profile
 SWCprofile_means <- scaled_data %>%
   group_by(SWCprofiles_UKB, SWCprofiles_order) %>%
   summarise(across(all_of(vars_to_scale), mean, na.rm = TRUE), .groups = "drop")
 
-#Covert columns of SWCprofile_means from wide format into long format
+##5. Reshape data to long format
 SWCprofile_long <- SWCprofile_means %>%
   pivot_longer(cols = all_of(vars_to_scale), 
                names_to = "Metric", values_to = "Z_score")
 
-#Assign SWC dimensions
+##6. Assign SWC dimensions
 SWCprofile_long <- SWCprofile_long %>%
   mutate(Dimensions = case_when(
     Metric %in% c("relativeamplitude", "cosinormesor", "cosinoramplitude", "cosinorr2", "is", "iv" ) ~ "RAR",
@@ -44,7 +47,7 @@ SWCprofile_long <- SWCprofile_long %>%
     Metric %in% c("durationsleepwindow", "sleepefficiency", "durationsleepbouts", "tpwsn", "accelerationduringsleep", "numbersleepbouts", "l5value", "tpswn", "durationwake", "durationwakebouts" ) ~ "Sleep",
     Metric %in% c("sleeponset", "sleepoffset", "m10timing","l5timing", "cosinoracrotime") ~ "Chronotype"))
 
-#Plot
+##7. Prepare labels for plotting
 SWCprofile_long <- SWCprofile_long %>%
   mutate(Dimensions = factor(Dimensions, levels = rev(c("Chronotype", "Sleep", "Daytime\nActivity", "RAR")))) %>%
   mutate(Varname2 = "NULL") %>%
@@ -96,7 +99,8 @@ SWCprofile_long <- SWCprofile_long %>%
   mutate(SWCprofiles_UKB2 = ifelse(SWCprofiles_UKB == "RAR - PA + Restless sleep",  "Profile 8\n\nRAR -\nPA +\nRestless sleep\n\nN = 1,672\n(3.4%)", SWCprofiles_UKB2)) %>%
   mutate(SWCprofiles_UKB2 = ifelse(SWCprofiles_UKB == "RAR -- PA -- Chronotype -",  "Profile 9\n\nRAR --\nPA --\nChronotype -\n\nN = 2,987\n(6.1%)", SWCprofiles_UKB2))
 
-SWC_profiles_UKBB <- ggplot(data = SWCprofile_long, aes(y = Varname2, x = Z_score, fill = Dimensions)) +
+##8. Plot figure 1 
+SWC_profiles_UKBB <-ggplot(data = SWCprofile_long, aes(y = Varname2, x = Z_score, fill = Dimensions)) +
   facet_grid(Dimensions ~ SWCprofiles_UKB2, scales = "free", space = "free") + 
   theme_bw() +
   theme(
@@ -115,11 +119,13 @@ SWC_profiles_UKBB <- ggplot(data = SWCprofile_long, aes(y = Varname2, x = Z_scor
   geom_col(position = position_dodge2()) +
   scale_fill_manual(values = c( "#515A66","#727D84","#9AA2A3", "#BFC2C1"))
 
-#Save the figure
+#Save figure 1
 ggsave("path/figure_1.svg", SWC_profiles_UKBB, width = 500, height = 300, units = "mm")
 
-
+###-------------------------------------------------------------------------------------------------------------------------------------------------------------###
 ## Figure 2: Hazard ratios from Cox proportional hazard models for the association between sleep-wake cycle profiles and types of cardiovascular disease events (coronary heart disease, heart failure and stroke) in the UKB accelerometer sub-study.  
+###-------------------------------------------------------------------------------------------------------------------------------------------------------------###
+
 
 #Creation of incident CVD events variables:
 
@@ -259,9 +265,9 @@ CHD <-ggplot(results_all_CHD, aes(x = Label, y = HR, color = HR_Pvalue)) +
     
 #Heart failure results
 results_all_HF <- bind_rows(
-  cox_results(cox_cvd_2_uk_Heart_f, "HEART FAILURE", "Model 1"),
-  cox_results(cox_cvd_3_uk_Heart_f, "HEART FAILURE", "Model 2"),
-  cox_results(cox_cvd_4_uk_Heart_f, "HEART FAILURE", "Model 3"))
+  cox_results(Model_1_HF, "HEART FAILURE", "Model 1"), 
+  cox_results(Model_2_HF, "HEART FAILURE", "Model 2"),
+  cox_results(Model_3_HF, "HEART FAILURE", "Model 3"))
 
 plot_order_HF <- rev(c(
   "1.RAR++/PA++", "2.RAR+/PA+/Sleep-", "3.RAR+/LIPA+/Sleep+ (Ref.)", "4.MVPA+", "5.RAR-/Chronotype--", "6.RAR-/PA-/Sleep+",
@@ -302,9 +308,9 @@ HF <- ggplot(results_all_HF, aes(x = Label, y = HR, color = HR_Pvalue)) +
     
 #Stroke results
 results_all_Stroke <- bind_rows(
-  cox_results(cox_cvd_2_uk_stroke, "STROKE", "Model 1"),
-  cox_results(cox_cvd_3_uk_stroke, "STROKE", "Model 2"),
-  cox_results(cox_cvd_4_uk_stroke, "STROKE", "Model 3"))
+  cox_results(Model_1_Stroke, "STROKE", "Model 1"),
+  cox_results(Model_2_Stroke, "STROKE", "Model 2"),
+  cox_results(Model_3_Stroke, "STROKE", "Model 3"))
 
 plot_order_Stroke <- rev(c(
   "1.RAR++/PA++", "2.RAR+/PA+/Sleep-", "3.RAR+/LIPA+/Sleep+ (Ref.)", "4.MVPA+", "5.RAR-/Chronotype--", "6.RAR-/PA-/Sleep+",
@@ -366,8 +372,9 @@ ggsave("//path/figure_2.svg", Figure_2, width = 500, height = 350, units = "mm")
 
 
 ### Tables
-
-## Table 1 Characteristics of study population at baseline by incident cardiovascular disease in the UKB and WII accelerometer sub-studies.
+###------------------------------------------------------------------------------------------------------------------------------------###
+## Table 1 Characteristics of participants at baseline by incident cardiovascular disease in the UKB and WII accelerometer sub-studies.
+###------------------------------------------------------------------------------------------------------------------------------------###
 
 #Select the variables of interest
 descriptive_cvd <- subset(Data, select = c(
