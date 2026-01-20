@@ -17,7 +17,7 @@ library(ggplot2)
 ##1. Load data 
 Data <- read.csv("path/name.csv")
 
-##2. Define profile ordering
+##1. Define profile ordering
 Data$SWCprofiles_order <- factor(Data$SWCprofiles_UKB, 
                                           levels = c("RAR ++ PA ++", "RAR + PA + Sleep -","RAR + LIPA + Sleep +", "MVPA +",
                                                      "RAR - Chronotype --", "RAR - PA - Sleep +", "RAR - PA - Sleep --", "RAR - PA + Restless sleep",
