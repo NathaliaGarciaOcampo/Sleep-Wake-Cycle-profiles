@@ -1,0 +1,40 @@
+###--------------------------###
+ ## Cohort study: UK Biobank ##
+###--------------------------###
+
+#Setting SWC profile 1 as the reference:
+sample_cvd_uk$SWCprofiles_UKB <- factor(sample_cvd_uk$SWCprofiles_UKB, levels = c("SWCprofiles_UKBProfile 1","SWCprofiles_UKBProfile 2", "SWCprofiles_UKBProfile 3", "SWCprofiles_UKBProfile 4", "SWCprofiles_UKBProfile 5", "SWCprofiles_UKBProfile 6", "SWCprofiles_UKBProfile 7", "SWCprofiles_UKBProfile 8", "SWCprofiles_UKBProfile 9" ))
+sample_cvd_uk$SWCprofiles_UKB <- relevel(sample_cvd_uk$SWCprofiles_UKB, ref = "SWCprofiles_UKBProfile 1")
+
+#Rerunning the models with SWC profile 1 as the reference:
+#Model 1
+cox_cvd_1_uk_profile1 <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ c9  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat ,  data = sample_cvd_uk)
+summary(cox_cvd_1_uk_profile1)
+#Model 2
+cox_cvd_2_uk_profile1 <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ c9  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = sample_cvd_uk)
+summary(cox_cvd_2_uk_profile1)
+#Rerunning in model 3
+cox_cvd_3_uk_profile1 <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ c9  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + bmi_cat + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = sample_cvd_uk)
+summary(cox_cvd_3_uk_profile1)
+
+#Setting SWC profile 6 as the reference:
+sample_cvd_uk$SWCprofiles_UKB <- relevel(sample_cvd_uk$SWCprofiles_UKB, ref = "SWCprofiles_UKBProfile 6")
+
+#Rerunning the models with SWC profile 6 as the reference:
+#Model 1
+cox_cvd_1_uk_profile6 <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ c9  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat ,  data = sample_cvd_uk)
+summary(cox_cvd_1_uk_profile6)
+#Model 2
+cox_cvd_2_uk_profile6 <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ c9  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = sample_cvd_uk)
+summary(cox_cvd_2_uk_profile6)
+#Rerunning in model 3
+cox_cvd_3_uk_profile6 <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ c9  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + bmi_cat + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = sample_cvd_uk)
+summary(cox_cvd_3_uk_profile6)
+
+#Setting back SWC profile 3 as the reference:
+sample_cvd_uk$SWCprofiles_UKB <- relevel(sample_cvd_uk$SWCprofiles_UKB, ref = "SWCprofiles_UKBProfile 3")
+sample_cvd_uk$SWCprofiles_UKB <- factor(sample_cvd_uk$SWCprofiles_UKB, levels = c("SWCprofiles_UKBProfile 1","SWCprofiles_UKBProfile 2", "SWCprofiles_UKBProfile 3", "SWCprofiles_UKBProfile 4", "SWCprofiles_UKBProfile 5", "SWCprofiles_UKBProfile 6", "SWCprofiles_UKBProfile 7", "SWCprofiles_UKBProfile 8", "SWCprofiles_UKBProfile 9" ))
+
+###----------------------------###
+ ## Cohort study: Whitehall II ##
+###----------------------------###
