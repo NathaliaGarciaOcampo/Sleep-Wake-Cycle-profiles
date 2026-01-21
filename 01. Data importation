@@ -5,10 +5,9 @@ library(ggplot2)
 library(ggpubr)
 
 #Loading the data sets: 
-###--------------------------###
+###---------------------------###
  ## Cohort study: UK Biobank ##
-###--------------------------###
-
+###---------------------------###
 Data_UKBB <- read.csv("path/name.csv")
 #This script assumes a preprocessed dataset containing:
 
@@ -16,3 +15,8 @@ Data_UKBB <- read.csv("path/name.csv")
 #Dates: Date of enrollment (doacc), date of birth (dob),  date of mortality(mortality_date), date of CHD event(chd_out_sro_date), date of HF event(hfailure_out_sro_date), date of Stroke event(stroke_out_sro_date), date of cancer (cancer_out_sro_date), arthritis (osteoarthritis_out_sro_date), liver disease (liver_out_sro_date), chronic obstructive pulmonary disease (copd_out_sro_date), depression (depression_out_sro_date), other mental health disorders (mentaldisorders_out_sro_date) and Parkinson disease (parkinson_out_sro_date)
 #Disease event indicators, this include all cases before and after date of enrollment:  CHD (chd_out_sro), HF (hfailure_out_sro), stroke (stroke_out_sro), cancer (cancer_out_sro), arthritis (osteoarthritis_out_sro), liver disease (liver_out_sro), chronic obstructive pulmonary disease (copd_out_sro), depression (depression_out_sro), other mental health disorders (mentaldisorders_out_sro) and Parkinson disease (parkinson_out_sro). 
 #Covariates: Sex(sex), Education level(edu), marital status(livingalone), occupational status(work), smoking status(smoking), alcohol consumption(alcohol_3cat), fruit and vegetable consumption(fruitveg),Intake of central nervious system medication(CNS), BMI (bmi_cat),Hypertension status (Hypertension_UK),Diabetes status(Diabetes_UK), Hyperlipidaemia status(HYPLIP)
+
+###---------------------------###
+ ## Cohort study: Whitehall II ##
+###---------------------------###
+
