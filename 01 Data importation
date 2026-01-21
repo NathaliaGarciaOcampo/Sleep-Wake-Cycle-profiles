@@ -1,1 +1,19 @@
+# Libraries
+library(dplyr) 
+library(tidyr) 
+library(ggplot2) 
+library(ggpubr)
 
+#Loading the data sets: 
+###--------------------------###
+ ## Cohort study: UK Biobank ##
+###--------------------------###
+
+Data_UKBB <- read.csv("path/name.csv")
+#This script assumes a preprocessed dataset containing:
+
+#Exposure: 36 accelerometer derived metrics and 9 sleep-wake cycle (SWC) profiles(SWCprofiles_UKB).For readers interested in the methodological details of clusters (profiles) identification, the codes are available at: "".
+#Dates: Date of mortality(mortality_date), Date of CHD event(chd_out_sro_date), Date of HF event(hfailure_out_sro_date), Date of Stroke event(stroke_out_sro_date), Date of enrollment (doacc).
+#CVD-subtypes event indicators, this include all cases before and after date of enrollment: Stroke cases: Stroke status(stroke_out_sro)
+#Covariates: Sex(sex), Education level(edu), marital status(livingalone), occupational status(work_cat), smoking status(smoking), alcohol consumption(alcohol_3cat), fruit and vegetable consumption(fruitveg_cat),Intake of central nervious system medication(CNS), 
+#Number of chronic conditions(multimorbidity_index), BMI (bmi_cat),Hypertension status (Hypertension_UK),Diabetes status(Diabetes_UK), Hyperlipidaemia status(HYPLIP)
