@@ -10,9 +10,9 @@
 Data_UKBB$age_inclusion <- as.numeric(difftime(Data_UKBB$doacc, Data_UKBB$dob, units = "days")) / 365.25
 #Categorical variable
 Data_UKBB$age_inclusion_cat = Data_UKBB$age_inclusion
-Data_UKBB$age_inclusion_cat[Data_UKBB$age_inclusion<=70] =">=60 - <70 years"
-Data_UKBB$age_inclusion_cat[Data_UKBB$age_inclusion>70] = ">=70 years"
-Data_UKBB$age_inclusion_cat <- factor(Data_UKBB$age_inclusion_cat, levels = c("<70 years", ">=70 years"))
+Data_UKBB$age_inclusion_cat[Data_UKBB$age_inclusion<70] =">=60 - <70 years"
+Data_UKBB$age_inclusion_cat[Data_UKBB$age_inclusion>=70] = ">=70 years"
+Data_UKBB$age_inclusion_cat <- factor(Data_UKBB$age_inclusion_cat, levels = c(">=60 - <70 years", ">=70 years"))
 
 #Sex
 Data_UKBB$sex<-factor(Data_UKBB$sex, levels = c("1", "2"),labels = c("Male", "Female"))
