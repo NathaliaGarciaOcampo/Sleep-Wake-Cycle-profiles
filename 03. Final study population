@@ -1,0 +1,17 @@
+
+
+###Final population of study#####
+
+###--------------------------###
+ ## Cohort study: UK Biobank ##
+###--------------------------###
+
+missing_participants <- Data_UKBB[is.na(Data_UKBB$age_inclusion)|is.na(Data_UKBB$sex)|is.na(Data_UKBB$edu)| is.na(Data_UKBB$edu)| is.na(Data_UKBB$livingalone)| is.na(Data_UKBB$work_cat) | is.na(Data_UKBB$smoking) | is.na(Data_UKBB$alcohol_3cat) | is.na(Data_UKBB$fruitveg) | is.na(Data_UKBB$CNS) | is.na(Data_UKBB$multimorbidity_index) | is.na(Data_UKBB$bmi_cat) | is.na(Data_UKBB$Diabetes_UK) | is.na(Data_UKBB$Hypertension_UK) | is.na(Data_UKBB$HYPLIP), ] 
+n_missing <- nrow(missing_participants)
+print(n_missing)
+Data_CVD_uk <- Data_UKBB[Data_UKBB$CVD_prevalence_UK != 1, ] #Removing prevalent CVD cases
+sample_cvd_uk <- Data_CVD_uk[complete.cases(Data_CVD_uk[, c("livingalone", "smoking", "alcohol_3cat", "fruitveg", "bmi_cat", "work_cat")]), ]
+
+###----------------------------###
+ ## Cohort study: Whitehall II ##
+###----------------------------###
