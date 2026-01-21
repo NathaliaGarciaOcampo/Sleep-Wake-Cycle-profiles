@@ -1,4 +1,4 @@
-# Libraries
+# Libraries used for all the project:
 library(dplyr) 
 library(tidyr) 
 library(ggplot2) 
