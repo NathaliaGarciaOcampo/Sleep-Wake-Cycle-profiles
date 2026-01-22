@@ -6,10 +6,22 @@ sample_cvd_uk <- read.csv("path/sample_cvd_uk.csv")
 sample_cvd <- read.csv("path/sample_cvd.csv")
 
 ###----------------------------------------------------------------------------------------------------------###
-3.1)   -------------------------------## **Cohort study: UK Biobank** ##-------------------------------------
+3.1.0)   -------------------------------## **Cohort study: UK Biobank** ##-------------------------------------
 ###----------------------------------------------------------------------------------------------------------###
 
 ##Exposure:SWC profiles
+
+##3.1.3) Define profile labels and ordering
+sample_cvd_uk$SWCprofiles_UKB <- factor(
+  sample_cvd_uk$SWCprofiles_UKB,levels = c( "SWCprofiles_UKBProfile 1", "SWCprofiles_UKBProfile 2", "SWCprofiles_UKBProfile 3",  "SWCprofiles_UKBProfile 4",
+    "SWCprofiles_UKBProfile 5","SWCprofiles_UKBProfile 6","SWCprofiles_UKBProfile 7", "SWCprofiles_UKBProfile 8", "SWCprofiles_UKBProfile 9"),
+  labels = c( "RAR ++ PA ++", "RAR + PA + Sleep -", "RAR + LIPA + Sleep +","MVPA +","RAR - Chronotype --", "RAR - PA - Sleep +",
+    "RAR - PA - Sleep --", "RAR - PA + Restless sleep","RAR -- PA -- Chronotype -"))
+
+sample_cvd_uk$SWCprofiles_order <- factor(sample_cvd_uk$SWCprofiles_UKB, 
+                                          levels = c("RAR ++ PA ++", "RAR + PA + Sleep -","RAR + LIPA + Sleep +", "MVPA +",
+                                                     "RAR - Chronotype --", "RAR - PA - Sleep +", "RAR - PA - Sleep --", "RAR - PA + Restless sleep",
+                                                     "RAR -- PA -- Chronotype -"))
 
 ## 3.1.1) Scale the 36 accelerometer metrics 
 vars_to_scale <- names(sample_cvd_uk)[2:37] # Assumes metrics are columns 2–37, this is specific to our dataset
@@ -25,11 +37,6 @@ SWCprofile_means <- scaled_data %>%
 ###------------------------------------------------------------------------------------------------------------------------------------------------##
 ## Figure 1: Standardized mean scores on 36 metrics as a function of the nine sleep-wake cycle profiles in the UKB accelerometer sub-study
 
-##3.1.3)  Define profile ordering
-sample_cvd_uk$SWCprofiles_order <- factor(sample_cvd_uk$SWCprofiles_UKB, 
-                                          levels = c("RAR ++ PA ++", "RAR + PA + Sleep -","RAR + LIPA + Sleep +", "MVPA +",
-                                                     "RAR - Chronotype --", "RAR - PA - Sleep +", "RAR - PA - Sleep --", "RAR - PA + Restless sleep",
-                                                     "RAR -- PA -- Chronotype -"))
 ##3.1.4)  Reshape data to long format
 SWCprofile_long <- SWCprofile_means %>%
   pivot_longer(cols = all_of(vars_to_scale), 
@@ -211,10 +218,11 @@ print(doc, target = "Characteristics of study population by Incident CVD UKB.doc
 ###------------------------------------------------------------------------------------------------------------------------------------###
 
 ###-------------------------------------------------------------------------------------------------------------------------------------------###
- 3.2)  -------------------------------## **Cohort study: Whitehall II** ##---------------------------------------------------------------------
+ 3.2.0)  -------------------------------## **Cohort study: Whitehall II** ##---------------------------------------------------------------------
 ###--------------------------------------------------------------------------------------------------------------------------------------------###
 
+##Exposure:SWC profiles
 
-#Exposure: 
+## 3.2.1) Scale the 36 accelerometer metrics 
 
 
