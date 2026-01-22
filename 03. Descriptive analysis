@@ -1,36 +1,41 @@
 
-###--------------------------###
- ## Cohort study: UK Biobank ##
-###--------------------------###
+## 4.0 ) Descriptive analysis 
 
-#Exposure:
-SWC profiles
-## Scale the 36 accelerometer metrics 
-vars_to_scale <- names(Data)[2:37] # Assumes metrics are columns 2–37, this is specific to our dataset
-scaled_data <- Data %>%
+#Load the preprocessed datasets:
+sample_cvd_uk <- read.csv("path/sample_cvd_uk.csv")
+sample_cvd <- read.csv("path/sample_cvd.csv")
+
+###----------------------------------------------------------------------------------------------------------###
+  -------------------------------## **Cohort study: UK Biobank** ##------------------------------------------
+###----------------------------------------------------------------------------------------------------------###
+
+##Exposure:SWC profiles
+
+## 4.1) Scale the 36 accelerometer metrics 
+vars_to_scale <- names(sample_cvd_uk)[2:37] # Assumes metrics are columns 2–37, this is specific to our dataset
+scaled_data <- sample_cvd_uk %>%
   select(all_of(vars_to_scale), SWCprofiles_UKB, SWCprofiles_order) %>%
   mutate(across(all_of(vars_to_scale), scale)) 
 
-## Compute mean z-scores by SWC profile
+## 4.2) Compute mean z-scores by SWC profile
 SWCprofile_means <- scaled_data %>%
   group_by(SWCprofiles_UKB, SWCprofiles_order) %>%
   summarise(across(all_of(vars_to_scale), mean, na.rm = TRUE), .groups = "drop")
 
-##------------------------------------------------------------------------------------------------------------------------------------------##
+###------------------------------------------------------------------------------------------------------------------------------------------------##
 ## Figure 1: Standardized mean scores on 36 metrics as a function of the nine sleep-wake cycle profiles in the UKB accelerometer sub-study
-##------------------------------------------------------------------------------------------------------------------------------------------##
 
-##. Define profile ordering
-Data$SWCprofiles_order <- factor(Data$SWCprofiles_UKB, 
+##4.3)  Define profile ordering
+sample_cvd_uk$SWCprofiles_order <- factor(sample_cvd_uk$SWCprofiles_UKB, 
                                           levels = c("RAR ++ PA ++", "RAR + PA + Sleep -","RAR + LIPA + Sleep +", "MVPA +",
                                                      "RAR - Chronotype --", "RAR - PA - Sleep +", "RAR - PA - Sleep --", "RAR - PA + Restless sleep",
                                                      "RAR -- PA -- Chronotype -"))
-##. Reshape data to long format
+##4.4)  Reshape data to long format
 SWCprofile_long <- SWCprofile_means %>%
   pivot_longer(cols = all_of(vars_to_scale), 
                names_to = "Metric", values_to = "Z_score")
 
-##. Assign SWC dimensions
+##4.5)  Assign SWC dimensions
 SWCprofile_long <- SWCprofile_long %>%
   mutate(Dimensions = case_when(
     Metric %in% c("relativeamplitude", "cosinormesor", "cosinoramplitude", "cosinorr2", "is", "iv" ) ~ "RAR",
@@ -38,7 +43,7 @@ SWCprofile_long <- SWCprofile_long %>%
     Metric %in% c("durationsleepwindow", "sleepefficiency", "durationsleepbouts", "tpwsn", "accelerationduringsleep", "numbersleepbouts", "l5value", "tpswn", "durationwake", "durationwakebouts" ) ~ "Sleep",
     Metric %in% c("sleeponset", "sleepoffset", "m10timing","l5timing", "cosinoracrotime") ~ "Chronotype"))
 
-##. Prepare labels for plotting
+##4.6)  Prepare labels for plotting
 SWCprofile_long <- SWCprofile_long %>%
   mutate(Dimensions = factor(Dimensions, levels = rev(c("Chronotype", "Sleep", "Daytime\nActivity", "RAR")))) %>%
   mutate(Varname2 = "NULL") %>%
@@ -90,7 +95,7 @@ SWCprofile_long <- SWCprofile_long %>%
   mutate(SWCprofiles_UKB2 = ifelse(SWCprofiles_UKB == "RAR - PA + Restless sleep",  "Profile 8\n\nRAR -\nPA +\nRestless sleep\n\nN = 1,672\n(3.4%)", SWCprofiles_UKB2)) %>%
   mutate(SWCprofiles_UKB2 = ifelse(SWCprofiles_UKB == "RAR -- PA -- Chronotype -",  "Profile 9\n\nRAR --\nPA --\nChronotype -\n\nN = 2,987\n(6.1%)", SWCprofiles_UKB2))
 
-##. Plot figure 1 
+##4.7)  Plot figure 1 
 SWC_profiles_UKBB <-ggplot(data = SWCprofile_long, aes(y = Varname2, x = Z_score, fill = Dimensions)) +
   facet_grid(Dimensions ~ SWCprofiles_UKB2, scales = "free", space = "free") + 
   theme_bw() +
@@ -110,12 +115,14 @@ SWC_profiles_UKBB <-ggplot(data = SWCprofile_long, aes(y = Varname2, x = Z_score
   geom_col(position = position_dodge2()) +
   scale_fill_manual(values = c( "#515A66","#727D84","#9AA2A3", "#BFC2C1"))
 
-##. Save figure 1
+##4.8)  Save figure 1
 ggsave("path/figure_1.svg", SWC_profiles_UKBB, width = 500, height = 300, units = "mm")
+###------------------------------------------------------------------------------------------------------------------------------------------------##
 
 ##Covariates
-#Select the variables of interest
-descriptive_cvd <- subset(Data, select = c(
+
+##4.9) Select the variables of interest
+descriptive_cvd <- subset(sample_cvd_uk, select = c(
   "sex", "age_inclusion", "edu", "livingalone", "work_cat", "smoking", "alcohol_3cat", 
   "fruitveg_cat", "CNS", "bmi_cat", "HYPLIP","Chronic_conditions", "Diabetes_UK", 
   "Hypertension_UK", "SWCprofiles_UKB"))
@@ -125,14 +132,14 @@ categorical_vars <- c( "sex", "edu", "livingalone", "work_cat", "smoking", "alco
                        "fruitveg_cat", "CNS", "bmi_cat", "HYPLIP","Chronic_conditions", "Diabetes_UK", "Hypertension_UK", "SWCprofiles_UKB")
 numerical_vars <- c("age_inclusion") 
 
-#Compute the frequency and percentage table for each categorical variable
+##4.10) Compute the frequency and percentage table for each categorical variable
 for (var in categorical_vars) {
   cat("\nVariable:", var, "\n")  
   print(table(descriptive_cvd[[var]], useNA = "always"))  
   print(prop.table(table(descriptive_cvd[[var]])) * 100)  
   cat("---------------------------------------------------\n")}
 
-#Compute the mean, SD, median and IQR
+##4.11) Compute the mean, SD, median and IQR
 summary_stats <- data.frame(
   Variable = numerical_vars,
   Mean = sapply(descriptive_cvd[numerical_vars], function(x) mean(x, na.rm = TRUE)),
@@ -140,9 +147,10 @@ summary_stats <- data.frame(
   Median = sapply(descriptive_cvd[numerical_vars], function(x) median(x, na.rm = TRUE)),
   IQR = sapply(descriptive_cvd[numerical_vars], function(x) IQR(x, na.rm = TRUE)))
 
-#Check the assumptions for categorical variables 
+##4.12) Check the assumptions: 
+#categorical variables 
 for (var in categorical_vars) {
-  chitable <- table(Data$CVD_incidence_UK, Data[[var]])
+  chitable <- table(sample_cvd_uk$CVD_incidence_UK, sample_cvd_uk[[var]])
   testtable <- chisq.test(chitable)
   cat("\nChi-Square Test for:", var, "\n")
   print(testtable)
@@ -151,17 +159,15 @@ for (var in categorical_vars) {
   }
   cat("---------------------------------------------------\n")}
 
-#Check the assumptions for numerical variables
-ggplot(Data, aes(x=age_inclusion)) +
+#numerical variables
+ggplot(sample_cvd_uk, aes(x=age_inclusion)) +
   geom_histogram(binwidth = 5, fill="#FFF6F4", color='#AC6A9F') 
 
 ###------------------------------------------------------------------------------------------------------------------------------------###
 ## Part 1 --> Table 1 Characteristics of participants at baseline by incident cardiovascular disease in the UKB accelerometer sub-study.
-###------------------------------------------------------------------------------------------------------------------------------------###
 
-#Bivariate analysis
-#summary table by Incident CVD
-tab1 <- Data %>%
+##4.13) summary table by Incident CVD
+tab1 <- sample_cvd_uk %>%
   select(all_of(c(numerical_vars, categorical_vars, "CVD_incidence_UK"))) %>%
   tbl_summary(
     by = CVD_incidence_UK,  
@@ -196,16 +202,17 @@ tab1 <- Data %>%
   bold_p()
 print(tab1)
 
-#To print the table in a word document
+##4.14) To print the table in a word document
 tab1_flex <- as_flex_table(tab1)
 doc <- read_docx() %>%
 body_add_flextable(tab1_flex) %>%
 body_add_par("Table 1: Characteristics of study population by Incident CVD UKB", style = "heading 2")
 print(doc, target = "Characteristics of study population by Incident CVD UKB.docx")
+###------------------------------------------------------------------------------------------------------------------------------------###
 
-###----------------------------###
- ## Cohort study: Whitehall II ##
-###----------------------------###
+###----------------------------------------------------------------------------------------------------------###
+  -------------------------------## **Cohort study: Whitehall II** ##------------------------------------------
+###----------------------------------------------------------------------------------------------------------###
 
 #Exposure: 
 
