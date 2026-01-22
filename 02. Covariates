@@ -1,228 +1,231 @@
 
-##Covariates prepation: 
-###---------------------------###
- ## Cohort study: UK Biobank ##
-###---------------------------###
+# 2.0) Covariates prepation:
 
-###Socio-demographic and behavioural factors:
+###----------------------------------------------------------------------------------------------------------###
+  -------------------------------## **Cohort study: UK Biobank** ##------------------------------------------
+###----------------------------------------------------------------------------------------------------------###
+
+## 2.1) Socio-demographic and behavioural factors:
 #Age:
 #Numerical variable:
-Data_UKBB$age_inclusion <- as.numeric(difftime(Data_UKBB$doacc, Data_UKBB$dob, units = "days")) / 365.25
+Data_UKB$age_inclusion <- as.numeric(difftime(Data_UKB$doacc, Data_UKB$dob, units = "days")) / 365.25
 #Categorical variable
-Data_UKBB$age_inclusion_cat = Data_UKBB$age_inclusion
-Data_UKBB$age_inclusion_cat[Data_UKBB$age_inclusion<70] =">=60 - <70 years"
-Data_UKBB$age_inclusion_cat[Data_UKBB$age_inclusion>=70] = ">=70 years"
-Data_UKBB$age_inclusion_cat <- factor(Data_UKBB$age_inclusion_cat, levels = c(">=60 - <70 years", ">=70 years"))
+Data_UKB$age_inclusion_cat = Data_UKB$age_inclusion
+Data_UKB$age_inclusion_cat[Data_UKB$age_inclusion<70] =">=60 - <70 years"
+Data_UKB$age_inclusion_cat[Data_UKB$age_inclusion>=70] = ">=70 years"
+Data_UKB$age_inclusion_cat <- factor(Data_UKB$age_inclusion_cat, levels = c(">=60 - <70 years", ">=70 years"))
 
 #Sex
-Data_UKBB$sex<-factor(Data_UKBB$sex, levels = c("1", "2"),labels = c("Male", "Female"))
+Data_UKB$sex<-factor(Data_UKB$sex, levels = c("1", "2"),labels = c("Male", "Female"))
 
 #Education
-Data_UKBB$edu <-factor(Data_UKBB$edu, levels = c("0", "1", "2"), labels = c("Lower secondary school or less", "Secondary school", "Higher than secondary school"))
+Data_UKB$edu <-factor(Data_UKB$edu, levels = c("0", "1", "2"), labels = c("Lower secondary school or less", "Secondary school", "Higher than secondary school"))
 
 #Marital status
-Data_UKBB$livingalone <- factor(Data_UKBB$livingalone, levels =  c("0", "1"),labels = c("Married or Cohabiting", "Not Married or Cohabiting"))
+Data_UKB$livingalone <- factor(Data_UKB$livingalone, levels =  c("0", "1"),labels = c("Married or Cohabiting", "Not Married or Cohabiting"))
 
 #Occupational status
-Data_UKBB$work_cat <- Data_UKBB$work
-Data_UKBB$work_cat[Data_UKBB$work_cat == -7 | Data_UKBB$work_cat == -3] <- NA
-Data_UKBB$work_cat[Data_UKBB$work_cat == 1] <- 1
-Data_UKBB$work_cat[!is.na(Data_UKBB$work_cat) & Data_UKBB$work_cat != 1] <- 0 #Participants with unpaid/voluntary work were classified as unemployed 
-Data_UKBB$work_cat <- factor(Data_UKBB$work_cat, levels = c(0, 1), labels = c("Non Employed", "Employed"))
+Data_UKB$work_cat <- Data_UKB$work
+Data_UKB$work_cat[Data_UKB$work_cat == -7 | Data_UKB$work_cat == -3] <- NA
+Data_UKB$work_cat[Data_UKB$work_cat == 1] <- 1
+Data_UKB$work_cat[!is.na(Data_UKB$work_cat) & Data_UKB$work_cat != 1] <- 0 #Participants with unpaid/voluntary work were classified as unemployed 
+Data_UKB$work_cat <- factor(Data_UKB$work_cat, levels = c(0, 1), labels = c("Non Employed", "Employed"))
 
 #Smoking status
-Data_UKBB$smoking <-factor(Data_UKBB$smoking, levels =  c("0", "1", "2"), labels = c("never-smoker", "ex-smoker", "current smoker"))
+Data_UKB$smoking <-factor(Data_UKB$smoking, levels =  c("0", "1", "2"), labels = c("never-smoker", "ex-smoker", "current smoker"))
 
 #Alcohol consumption
-Data_UKBB$alcohol_3cat <-factor(Data_UKBB$alcohol_3cat, levels =  c("0", "1", "2"),  labels = c("No consumption", "1-14 units per week", ">14 units per week"))
+Data_UKB$alcohol_3cat <-factor(Data_UKB$alcohol_3cat, levels =  c("0", "1", "2"),  labels = c("No consumption", "1-14 units per week", ">14 units per week"))
 
 #Daily intake of fruits and vegetables
-Data_UKBB$fruitveg_cat = Data_UKBB$fruitveg
-Data_UKBB$fruitveg_cat[Data_UKBB$fruitveg == 2] <- 1
-Data_UKBB$fruitveg_cat[Data_UKBB$fruitveg == 0 | Data_UKBB$fruitveg == 1 ] <- 0
-Data_UKBB$fruitveg_cat <-factor(Data_UKBB$fruitveg_cat, levels = c("0", "1"), labels = c("< 2 times per day", ">= 2 times per day"))
+Data_UKB$fruitveg_cat = Data_UKB$fruitveg
+Data_UKB$fruitveg_cat[Data_UKB$fruitveg == 2] <- 1
+Data_UKB$fruitveg_cat[Data_UKB$fruitveg == 0 | Data_UKB$fruitveg == 1 ] <- 0
+Data_UKB$fruitveg_cat <-factor(Data_UKB$fruitveg_cat, levels = c(0,1), labels = c("< 2 times per day", ">= 2 times per day"))
 
-##General health related factors##
+
+## 2.2) General health related factors
 
 #Intake of Central Nervous System (CNS) medications
-Data_UKBB$CNS <- factor(Data_UKBB$CNS, levels = c("0","1"), labels = c("No intake", "Intake"))
-
+Data_UKB$CNS <- factor(Data_UKB$CNS, levels = c("0","1"), labels = c("No intake", "Intake"))
 
 #Number of chronic diseases
 #Parkinson
-Data_UKBB$parkinson_out_sro[is.na(Data_UKBB$parkinson_out_sro)] <- 0
-Data_UKBB$parkinson_UK = Data_UKBB$parkinson_out_sro
-Data_UKBB$parkinson_UK <- ifelse(
-  !is.na(Data_UKBB$parkinson_out_sro) & Data_UKBB$parkinson_out_sro == 1 &
-  !is.na(Data_UKBB$parkinson_out_sro_date) & Data_UKBB$parkinson_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$parkinson_out_sro[is.na(Data_UKB$parkinson_out_sro)] <- 0
+Data_UKB$parkinson_UK = Data_UKB$parkinson_out_sro
+Data_UKB$parkinson_UK <- ifelse(
+  !is.na(Data_UKB$parkinson_out_sro) & Data_UKB$parkinson_out_sro == 1 &
+  !is.na(Data_UKB$parkinson_out_sro_date) & Data_UKB$parkinson_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
 #COPD
-Data_UKBB$copd_out_sro[is.na(Data_UKBB$copd_out_sro)] <- 0
-Data_UKBB$COPD_UK = Data_UKBB$copd_out_sro
-Data_UKBB$COPD_UK <- ifelse(
-  !is.na(Data_UKBB$copd_out_sro) & Data_UKBB$copd_out_sro == 1 &
-  !is.na(Data_UKBB$copd_out_sro_date) & Data_UKBB$copd_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$copd_out_sro[is.na(Data_UKB$copd_out_sro)] <- 0
+Data_UKB$COPD_UK = Data_UKB$copd_out_sro
+Data_UKB$COPD_UK <- ifelse(
+  !is.na(Data_UKB$copd_out_sro) & Data_UKB$copd_out_sro == 1 &
+  !is.na(Data_UKB$copd_out_sro_date) & Data_UKB$copd_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
 #Depression
-Data_UKBB$depression_out_sro[is.na(Data_UKBB$depression_out_sro)] <- 0
-Data_UKBB$depression_UK = Data_UKBB$depression_out_sro
-Data_UKBB$depression_UK <- ifelse(
-  !is.na(Data_UKBB$depression_out_sro) & Data_UKBB$depression_out_sro == 1 &
-  !is.na(Data_UKBB$depression_out_sro_date) & Data_UKBB$depression_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$depression_out_sro[is.na(Data_UKB$depression_out_sro)] <- 0
+Data_UKB$depression_UK = Data_UKB$depression_out_sro
+Data_UKB$depression_UK <- ifelse(
+  !is.na(Data_UKB$depression_out_sro) & Data_UKB$depression_out_sro == 1 &
+  !is.na(Data_UKB$depression_out_sro_date) & Data_UKB$depression_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
 #Other mental disorders
-Data_UKBB$mentaldisorders_out_sro[is.na(Data_UKBB$mentaldisorders_out_sro)] <- 0
-Data_UKBB$OtherMD_UK = Data_UKBB$mentaldisorders_out_sro
-Data_UKBB$OtherMD_UK <- ifelse(
-  !is.na(Data_UKBB$mentaldisorders_out_sro) & Data_UKBB$mentaldisorders_out_sro == 1 &
-  !is.na(Data_UKBB$mentaldisorders_out_sro_date) & Data_UKBB$mentaldisorders_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$mentaldisorders_out_sro[is.na(Data_UKB$mentaldisorders_out_sro)] <- 0
+Data_UKB$OtherMD_UK = Data_UKB$mentaldisorders_out_sro
+Data_UKB$OtherMD_UK <- ifelse(
+  !is.na(Data_UKB$mentaldisorders_out_sro) & Data_UKB$mentaldisorders_out_sro == 1 &
+  !is.na(Data_UKB$mentaldisorders_out_sro_date) & Data_UKB$mentaldisorders_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
 #Cancer
-Data_UKBB$cancer_out_sro[is.na(Data_UKBB$cancer_out_sro)] <- 0
-Data_UKBB$cancer_UK = Data_UKBB$cancer_out_sro
-Data_UKBB$cancer_UK <- ifelse(
-  !is.na(Data_UKBB$cancer_out_sro) & Data_UKBB$cancer_out_sro == 1 &
-  !is.na(Data_UKBB$cancer_out_sro_date) & Data_UKBB$cancer_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$cancer_out_sro[is.na(Data_UKB$cancer_out_sro)] <- 0
+Data_UKB$cancer_UK = Data_UKB$cancer_out_sro
+Data_UKB$cancer_UK <- ifelse(
+  !is.na(Data_UKB$cancer_out_sro) & Data_UKB$cancer_out_sro == 1 &
+  !is.na(Data_UKB$cancer_out_sro_date) & Data_UKB$cancer_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
 #Liver disease
-Data_UKBB$liver_out_sro[is.na(Data_UKBB$liver_out_sro)] <- 0
-Data_UKBB$Liverd_UK = Data_UKBB$liver_out_sro
-Data_UKBB$Liverd_UK <- ifelse(
-  !is.na(Data_UKBB$liver_out_sro) & Data_UKBB$liver_out_sro == 1 &
-  !is.na(Data_UKBB$liver_out_sro_date) & Data_UKBB$liver_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$liver_out_sro[is.na(Data_UKB$liver_out_sro)] <- 0
+Data_UKB$Liverd_UK = Data_UKB$liver_out_sro
+Data_UKB$Liverd_UK <- ifelse(
+  !is.na(Data_UKB$liver_out_sro) & Data_UKB$liver_out_sro == 1 &
+  !is.na(Data_UKB$liver_out_sro_date) & Data_UKB$liver_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
 #Arthritis
-Data_UKBB$osteoarthritis_out_sro[is.na(Data_UKBB$osteoarthritis_out_sro)] <- 0
-Data_UKBB$Arthritis_UK = Data_UKBB$osteoarthritis_out_sro
-Data_UKBB$Arthritis_UK <- ifelse(
-  !is.na(Data_UKBB$osteoarthritis_out_sro) & Data_UKBB$osteoarthritis_out_sro == 1 &
-  !is.na(Data_UKBB$osteoarthritis_out_sro_date) & Data_UKBB$osteoarthritis_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$osteoarthritis_out_sro[is.na(Data_UKB$osteoarthritis_out_sro)] <- 0
+Data_UKB$Arthritis_UK = Data_UKB$osteoarthritis_out_sro
+Data_UKB$Arthritis_UK <- ifelse(
+  !is.na(Data_UKB$osteoarthritis_out_sro) & Data_UKB$osteoarthritis_out_sro == 1 &
+  !is.na(Data_UKB$osteoarthritis_out_sro_date) & Data_UKB$osteoarthritis_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
-#Multimorbidity index:
-Data_UKBB$multimorbidity <- apply(Data_UKBB[, c("parkinson_UK", "COPD_UK", "OtherMD_UK", "depression_UK", "cancer_UK", "Liverd_UK", "Arthritis_UK")], 
+#Number of chronic conditions:
+Data_UKB$multimorbidity <- apply(Data_UKB[, c("parkinson_UK", "COPD_UK", "OtherMD_UK", "depression_UK", "cancer_UK", "Liverd_UK", "Arthritis_UK")], 
                                       1, function(x) ifelse(any(is.na(x)), NA, sum(x)))
-
-Data_UKBB$multimorbidity_index <- factor(
-  ifelse(Data_UKBB$multimorbidity == 0, "0 diseases", 
-         ifelse(Data_UKBB$multimorbidity == 1, "1 disease", ">=2 diseases")),
+Data_UKB$multimorbidity_index <- factor(
+  ifelse(Data_UKB$multimorbidity == 0, "0 diseases", 
+         ifelse(Data_UKB$multimorbidity == 1, "1 disease", ">=2 diseases")),
   levels = c("0 diseases", "1 disease", ">=2 diseases"))
 
 
-##Cardiometabolic risk factors
+## 2.3) Cardiometabolic risk factors
+
 #BMI
 #Numerical variable
-summary(Data_UKBB$bmi)
+summary(Data_UKB$bmi)
 #categorical variable
-Data_UKBB$bmi_cat = Data_UKBB$bmi
-Data_UKBB$bmi_cat[Data_UKBB$bmi  < 25] <- "<25 kg/m2"
-Data_UKBB$bmi_cat[Data_UKBB$bmi >= 25 & Data_UKBB$bmi < 30] <- ">=25 - <30 kg/m2"
-Data_UKBB$bmi_cat[Data_UKBB$bmi >= 30] <- ">=30 kg/m2"
-Data_UKBB$bmi_cat<-factor(Data_UKBB$bmi_cat)
+Data_UKB$bmi_cat = Data_UKB$bmi
+Data_UKB$bmi_cat[Data_UKB$bmi  < 25] <- "<25 kg/m2"
+Data_UKB$bmi_cat[Data_UKB$bmi >= 25 & Data_UKB$bmi < 30] <- ">=25 - <30 kg/m2"
+Data_UKB$bmi_cat[Data_UKB$bmi >= 30] <- ">=30 kg/m2"
+Data_UKB$bmi_cat<-factor(Data_UKB$bmi_cat)
 
 #Diabetes status
-Data_UKBB$diabetes_out_sro[is.na(Data_UKBB$diabetes_out_sro)] <- 0
-Data_UKBB$Diabetes_UK = Data_UKBB$diabetes_out_sro
-Data_UKBB$Diabetes_UK <- ifelse(
-  !is.na(Data_UKBB$diabetes_out_sro) & Data_UKBB$diabetes_out_sro == 1 &
-  !is.na(Data_UKBB$diabetes_out_sro_date) & Data_UKBB$diabetes_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$diabetes_out_sro[is.na(Data_UKB$diabetes_out_sro)] <- 0
+Data_UKB$Diabetes_UK = Data_UKB$diabetes_out_sro
+Data_UKB$Diabetes_UK <- ifelse(
+  !is.na(Data_UKB$diabetes_out_sro) & Data_UKB$diabetes_out_sro == 1 &
+  !is.na(Data_UKB$diabetes_out_sro_date) & Data_UKB$diabetes_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
 #Hypertension
-Data_UKBB$hypertension_out_sro[is.na(Data_UKBB$hypertension_out_sro)] <- 0
-Data_UKBB$Hypertension_UK = Data_UKBB$hypertension_out_sro
-Data_UKBB$Hypertension_UK <- ifelse(
-  !is.na(Data_UKBB$hypertension_out_sro) & Data_UKBB$hypertension_out_sro == 1 &
-  !is.na(Data_UKBB$hypertension_out_sro_date) & Data_UKBB$hypertension_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$hypertension_out_sro[is.na(Data_UKB$hypertension_out_sro)] <- 0
+Data_UKB$Hypertension_UK = Data_UKB$hypertension_out_sro
+Data_UKB$Hypertension_UK <- ifelse(
+  !is.na(Data_UKB$hypertension_out_sro) & Data_UKB$hypertension_out_sro == 1 &
+  !is.na(Data_UKB$hypertension_out_sro_date) & Data_UKB$hypertension_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
 #Hyperlipidaemia
-Data_UKBB$HYPLIP<-factor(Data_UKBB$HYPLIP, levels = c("0", "1"), labels = c("No Hyperlipidaemia", "Hyperlipidaemia"))
+Data_UKB$HYPLIP<-factor(Data_UKB$HYPLIP, levels = c("0", "1"), labels = c("No Hyperlipidaemia", "Hyperlipidaemia"))
 
 
-###Exposure: SWC profiles
-sample_cvd_uk$SWCprofiles_UKB <- factor(sample_cvd_uk$SWCprofiles_UKB, levels = c("SWCprofiles_UKBProfile 1","SWCprofiles_UKBProfile 2", "SWCprofiles_UKBProfile 3", "SWCprofiles_UKBProfile 4", "SWCprofiles_UKBProfile 5", "SWCprofiles_UKBProfile 6", "SWCprofiles_UKBProfile 7", "SWCprofiles_UKBProfile 8", "SWCprofiles_UKBProfile 9" ))
+## 2.4) Exposure: SWC profiles
+
+Data_UKB$SWCprofiles_UKB <- factor(Data_UKB$SWCprofiles_UKB, levels = c("SWCprofiles_UKBProfile 1","SWCprofiles_UKBProfile 2", "SWCprofiles_UKBProfile 3", "SWCprofiles_UKBProfile 4", "SWCprofiles_UKBProfile 5", "SWCprofiles_UKBProfile 6", "SWCprofiles_UKBProfile 7", "SWCprofiles_UKBProfile 8", "SWCprofiles_UKBProfile 9" ))
 #Setting the reference:
-sample_cvd_uk$SWCprofiles_UKB <- relevel(sample_cvd_uk$SWCprofiles_UKB, ref = "SWCprofiles_UKBProfile 3")
+Data_UKB$SWCprofiles_UKB <- relevel(Data_UKB$SWCprofiles_UKB, ref = "SWCprofiles_UKBProfile 3")
 
 
-#####Creating prevalent disease indicators:
+## 2.5) Creating prevalent disease indicators:
 
 #Prevalent CHD cases at enrollment date:
-Data_UKBB$CHD_Prevalence_UK <- ifelse(
-  !is.na(Data_UKBB$chd_out_sro) & Data_UKBB$chd_out_sro == 1 &
-    !is.na(Data_UKBB$chd_out_sro_date) & Data_UKBB$chd_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$CHD_Prevalence_UK <- ifelse(
+  !is.na(Data_UKB$chd_out_sro) & Data_UKB$chd_out_sro == 1 &
+    !is.na(Data_UKB$chd_out_sro_date) & Data_UKB$chd_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
 #Prevalent HF cases at enrollment date:
-Data_UKBB$HF_Prevalence_UK <- ifelse(
-  !is.na(Data_UKBB$hfailure_out_sro) & Data_UKBB$hfailure_out_sro == 1 &
-    !is.na(Data_UKBB$hfailure_out_sro_date) & Data_UKBB$hfailure_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$HF_Prevalence_UK <- ifelse(
+  !is.na(Data_UKB$hfailure_out_sro) & Data_UKB$hfailure_out_sro == 1 &
+    !is.na(Data_UKB$hfailure_out_sro_date) & Data_UKB$hfailure_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
 #Prevalent stroke cases at enrollment date:
-Data_UKBB$Stroke_Prevalence_UK <- ifelse(
-  !is.na(Data_UKBB$stroke_out_sro) & Data_UKBB$stroke_out_sro == 1 &
-    !is.na(Data_UKBB$stroke_out_sro_date) & Data_UKBB$stroke_out_sro_date <= Data_UKBB$doacc,
+Data_UKB$Stroke_Prevalence_UK <- ifelse(
+  !is.na(Data_UKB$stroke_out_sro) & Data_UKB$stroke_out_sro == 1 &
+    !is.na(Data_UKB$stroke_out_sro_date) & Data_UKB$stroke_out_sro_date <= Data_UKB$doacc,
   1, 0)
 
 #Prevalent CVD cases at enrollment date:
-Data_UKBB$CVD_prevalence_UK<- ifelse(
-  (!is.na(Data_UKBB$Stroke_Prevalence_UK) & Data_UKBB$Stroke_Prevalence_UK == 1) | 
-    (!is.na(Data_UKBB$CHD_Prevalence_UK) & Data_UKBB$CHD_Prevalence_UK == 1) | 
-    (!is.na(Data_UKBB$HF_Prevalence_UK) & Data_UKBB$HF_Prevalence_UK == 1), 1, 0)
+Data_UKB$CVD_prevalence_UK<- ifelse(
+  (!is.na(Data_UKB$Stroke_Prevalence_UK) & Data_UKB$Stroke_Prevalence_UK == 1) | 
+    (!is.na(Data_UKB$CHD_Prevalence_UK) & Data_UKB$CHD_Prevalence_UK == 1) | 
+    (!is.na(Data_UKB$HF_Prevalence_UK) & Data_UKB$HF_Prevalence_UK == 1), 1, 0)
 
-#####Creating incident disease indicators:
+
+## 2.6) Creating incident disease indicators:
 
 ##First CVD event:
 #The outcome of interest (CVD) was defined as the incidence of the first fatal or non-fatal CHD, HF and stroke. 
-Data$first_cvd_date_UK <- apply(Data[, c("hfailure_out_sro_date", "chd_out_sro_date", "stroke_out_sro_date")], 1, function(x) {
+Data_UKB$first_cvd_date_UK <- apply(Data_UKB[, c("hfailure_out_sro_date", "chd_out_sro_date", "stroke_out_sro_date")], 1, function(x) {
   if (all(is.na(x))) NA else min(x, na.rm = TRUE)})
-Data$first_cvd_date_UK <- as.Date(Data$first_cvd_date_UK)
+Data_UKB$first_cvd_date_UK <- as.Date(Data_UKB$first_cvd_date_UK)
 
 ##Incidence of CVD, CHD, HF & stroke, note that these variables refers to the incidence of the first event.
 
 #CVD incidence:
-Data$CVD_incidence_UK <- ifelse(
-  (is.na(Data$CVD_prevalence_UK) | Data$CVD_prevalence_UK == 0) &  # Not prevalent CVD at baseline
-    (!is.na(Data$first_cvd_date_UK) & Data$first_cvd_date_UK > Data$doacc), 1, 0) # First CVD event AFTER inclusion date
+Data_UKB$CVD_incidence_UK <- ifelse(
+  (is.na(Data_UKB$CVD_prevalence_UK) | Data_UKB$CVD_prevalence_UK == 0) &  # Not prevalent CVD at baseline
+    (!is.na(Data_UKB$first_cvd_date_UK) & Data_UKB$first_cvd_date_UK > Data_UKB$doacc), 1, 0) # First CVD event AFTER inclusion date
 
 #CHD incidence:
-Data$CHD_incidence_UK <- ifelse(
-  !is.na(Data$CHD_Prevalence_UK) & Data$CHD_Prevalence_UK == 0 &
-    !is.na(Data$first_cvd_date_UK) &!is.na(Data$chd_out_sro_date) &
-    Data$first_cvd_date_UK > Data$doacc &
-    Data$first_cvd_date_UK == Data$chd_out_sro_date, 1,0)
+Data_UKB$CHD_incidence_UK <- ifelse(
+  !is.na(Data_UKB$CVD_prevalence_UK) & Data_UKB$CVD_prevalence_UK == 0 &
+    !is.na(Data_UKB$first_cvd_date_UK) &!is.na(Data_UKB$chd_out_sro_date) &
+    Data_UKB$first_cvd_date_UK > Data_UKB$doacc &
+    Data_UKB$first_cvd_date_UK == Data_UKB$chd_out_sro_date, 1,0)
 
 #HF incidence:
-Data$HF_incidence_UK <- ifelse(
-  !is.na(Data$HF_Prevalence_UK) & Data$HF_Prevalence_UK == 0 &
-    !is.na(Data$first_cvd_date_UK) & !is.na(Data$hfailure_out_sro_date) &
-    Data$first_cvd_date_UK > Data$doacc &
-    Data$first_cvd_date_UK == Data$hfailure_out_sro_date, 1, 0)
+Data_UKB$HF_incidence_UK <- ifelse(
+  !is.na(Data_UKB$CVD_prevalence_UK) & Data_UKB$CVD_prevalence_UK == 0 &
+    !is.na(Data_UKB$first_cvd_date_UK) & !is.na(Data_UKB$hfailure_out_sro_date) &
+    Data_UKB$first_cvd_date_UK > Data_UKB$doacc &
+    Data_UKB$first_cvd_date_UK == Data_UKB$hfailure_out_sro_date, 1, 0)
 
 #Stroke incidence:
-Data$Stroke_incidence_UK <- ifelse(
-  !is.na(Data$Stroke_Prevalence_UK) & Data$Stroke_Prevalence_UK == 0 &
-    !is.na(Data$first_cvd_date_UK) & !is.na(Data$stroke_out_sro_date) &
-    Data$first_cvd_date_UK > Data$doacc &
-    Data$first_cvd_date_UK == Data$stroke_out_sro_date, 1, 0)
+Data_UKB$Stroke_incidence_UK <- ifelse(
+  !is.na(Data_UKB$CVD_prevalence_UK) & Data_UKB$CVD_prevalence_UK == 0 &
+    !is.na(Data_UKB$first_cvd_date_UK) & !is.na(Data_UKB$stroke_out_sro_date) &
+    Data_UKB$first_cvd_date_UK > Data_UKB$doacc &
+    Data_UKB$first_cvd_date_UK == Data_UKB$stroke_out_sro_date, 1, 0)
 
-###----------------------------###
- ## Cohort study: Whitehall II ##
-###----------------------------###
+###----------------------------------------------------------------------------------------------------------###
+  -------------------------------## **Cohort study: Whitehall II** ##------------------------------------------
+###----------------------------------------------------------------------------------------------------------###
 
+## 2.7) Socio-demographic and behavioural factors:
 
-###Socio-demographic and behavioural factors:
 #Age:
 #Numerical variable:
-Data_UKBB$age_inclusion <- as.numeric(difftime(Data_UKBB$doacc, Data_UKBB$dob, units = "days")) / 365.25
+summary(Data_CR$fage_si)
 #Categorical variable
 Data_CR$fage_cat = Data_CR$fage_si 
 Data_CR$fage_cat[Data_CR$fage_si<70] =">=60 - <70 years"
@@ -261,7 +264,17 @@ Data_CR$ffruit_cat[Data_CR$ffruitvg_i == "8: 2+/day" | Data_CR$ffruitvg_i == "8:
 Data_CR$ffruit_cat[Data_CR$ffruitvg_i != "8: 2+/day" & Data_CR$ffruitvg_i != "8: 4+/day"] <- 0
 Data_CR$ffruit_cat <-factor(Data_CR$ffruit_cat, levels = c(0,1), labels = c("< 2 times per day", ">= 2 times per day"))
 
-##General health related factors##
+
+## 2.8) General health related factors
+
+#Number of chronic conditions:
+Data_CR$multimorbidity <- apply(Data_CR[, c("park_p", "copd_p", "depression_p", "md_p", "cancer_p", "liver_p", "arth_p")], 
+                                      1, function(x) ifelse(any(is.na(x)), NA, sum(x)))
+table(Data_CR$multimorbidity, useNA = "always")
+Data_CR$multimorbidity_index <- factor(
+  ifelse(Data_CR$multimorbidity == 0, "0 diseases", 
+         ifelse(Data_CR$multimorbidity == 1, "1 disease", ">=2 diseases")),
+  levels = c("0 diseases", "1 disease", ">=2 diseases"))
 
 #Intake of Central Nervous System (CNS) medications
 Data_CR$fcnsdrg_i <-factor(Data_CR$fcnsdrg_i, levels = c("0","1"), labels = c("No intake", "Intake"))
@@ -279,7 +292,6 @@ Data_CR$depression_p<-factor(Data_CR$depression_p, levels = c("0","1"), labels =
 #Other mental disorders
 Data_CR$md_p<-factor(Data_CR$md_p, levels = c("0","1"), labels = c("No Disease", "Disease"))
 
-
 #Cancer
 Data_CR$cancer_p<-factor(Data_CR$cancer_p, levels = c("0","1"), labels = c("No Disease", "Disease"))
 
@@ -289,21 +301,14 @@ Data_CR$liver_p <-factor(Data_CR$liver_p, levels = c("0","1"), labels = c("No Di
 #Arthritis
 Data_CR$arth_p<-factor(Data_CR$arth_p, levels = c("0","1"), labels = c("No Disease", "Disease"))
 
-#Multimorbidity index:
-Data_CR$multimorbidity <- apply(Data_CR[, c("park_p", "copd_p", "depression_p", "md_p", "cancer_p", "liver_p", "arth_p")], 
-                                      1, function(x) ifelse(any(is.na(x)), NA, sum(x)))
 
-Data_CR$multimorbidity_index <- factor(
-  ifelse(Data_CR$multimorbidity == 0, "0 diseases", 
-         ifelse(Data_CR$multimorbidity == 1, "1 disease", ">=2 diseases")),
-  levels = c("0 diseases", "1 disease", ">=2 diseases"))
+## 2.9) Cardiometabolic risk factors
 
-
-##Cardiometabolic risk factors
 #BMI
 #Numerical variable
-summary(Data_UKBB$fbmi_i)
+summary(Data_CR$fbmi_i)
 #categorical variable
+Data_CR$fbmi_cat = Data_CR$fbmi_i
 Data_CR$fbmi_cat[Data_CR$fbmi_i  < 25] <- "<25 kg/m2"
 Data_CR$fbmi_cat[Data_CR$fbmi_i >= 25 & Data_CR$fbmi_i < 30] <- ">=25 - <30 kg/m2"
 Data_CR$fbmi_cat[Data_CR$fbmi_i >= 30] <- ">=30 kg/m2"
@@ -317,5 +322,75 @@ Data_CR$hypten_p<-factor(Data_CR$hypten_p, levels = c("0","1"), labels = c("No D
 
 #Hyperlipidaemia
 Data_CR$hyplip<-factor(Data_CR$hyplip, levels = c("0", "1"), labels = c("No Hyperlipidaemia", "Hyperlipidaemia"))
+
+
+## 2.10) Exposure: SWC profiles
+Data_CR$SWCprofiles_WII <- factor(Data_CR$SWCprofiles_WII, levels = c("SWCprofiles_WIIProfile 1","SWCprofiles_WIIProfile 2", "SWCprofiles_WIIProfile 3", "SWCprofiles_WIIProfile 4", "SWCprofiles_WIIProfile 5", "SWCprofiles_WIIProfile 6", "SWCprofiles_WIIProfile 7", "SWCprofiles_WIIProfile 8", "SWCprofiles_WIIProfile 9" ))
+#Setting the reference:
+Data_CR$SWCprofiles_WII <- relevel(Data_CR$SWCprofiles_WII, ref = "SWCprofiles_WIIProfile 3")
+
+
+## 2.11) Creating prevalent disease indicators:
+
+#Prevalent CHD cases at enrollment date:
+Data_CR$chd_prevalence <- ifelse(
+  (!is.na(Data_CR$d_chd) & Data_CR$d_chd <= Data_CR$fdatscrn),  
+  1, 0)
+
+#Prevalent HF cases at enrollment date:
+Data_CR$h_failure_prevalence <- ifelse(
+  (!is.na(Data_CR$d_hfailure) & Data_CR$d_hfailure <= Data_CR$fdatscrn),
+  1, 0)
+
+#Prevalent stroke cases at enrollment date:
+Data_CR$stroke_prevalence <- ifelse(
+  (!is.na(Data_CR$d_stroke) & Data_CR$d_stroke <= Data_CR$fdatscrn),1, 0)
+
+#Prevalent CVD cases at enrollment date:
+
+Data_CR$cvd_prevalence <- ifelse(
+  (!is.na(Data_CR$stroke_prevalence) & Data_CR$stroke_prevalence == 1) | 
+    (!is.na(Data_CR$chd_prevalence) & Data_CR$chd_prevalence == 1) | 
+    (!is.na(Data_CR$h_failure_prevalence) & Data_CR$h_failure_prevalence == 1), 1, 0)
+
+## 2.12) Creating incident disease indicators:
+
+##First CVD event:
+#The outcome of interest (CVD) was defined as the incidence of the first fatal or non-fatal CHD, HF and stroke. 
+Data_CR$first_cvd_date <- apply(Data_CR[, c("d_stroke", "d_hfailure", "d_chd")], 1, function(x) {
+  if (all(is.na(x))) NA else min(x, na.rm = TRUE)})
+Data_CR$first_cvd_date <- as.Date(Data_CR$first_cvd_date)
+
+##Incidence of CVD, CHD, HF & stroke, note that these variables refers to the incidence of the first event.
+
+#CVD incidence:
+Data_CR$cvd_incident <- ifelse(
+  (is.na(Data_CR$cvd_prevalence) | Data_CR$cvd_prevalence == 0) &  # Not prevalent at baseline
+  (!is.na(Data_CR$first_cvd_date) & Data_CR$first_cvd_date > Data_CR$fdatscrn), # First event AFTER the date of enrollment
+  1, 0)
+
+#CHD incidence:
+Data_CR$chd_incidence_final <- ifelse(
+  (is.na(Data_CR$cvd_prevalence) | Data_CR$cvd_prevalence == 0) & 
+  (!is.na(Data_CR$first_cvd_date) & !is.na(Data_CR$d_chd) &   
+   Data_CR$first_cvd_date > Data_CR$fdatscrn) &  
+  (Data_CR$first_cvd_date == Data_CR$d_chd), 
+  1, 0)
+
+#HF incidence:
+Data_CR$h_failure_incidence_final <- ifelse(
+  (is.na(Data_CR$cvd_prevalence) | Data_CR$cvd_prevalence == 0) & 
+  (!is.na(Data_CR$first_cvd_date) & !is.na(Data_CR$d_hfailure) &   
+   Data_CR$first_cvd_date > Data_CR$fdatscrn) &  
+  (Data_CR$first_cvd_date == Data_CR$d_hfailure), 
+  1, 0)
+
+#Stroke incidence:
+Data_CR$stroke_incidence_final <- ifelse(
+  (is.na(Data_CR$cvd_prevalence) | Data_CR$cvd_prevalence == 0) &  # Not CVD prevalent case at baseline
+  (!is.na(Data_CR$first_cvd_date) & !is.na(Data_CR$d_stroke) &  # The participant doesn't have a NA in date variables 
+   Data_CR$first_cvd_date > Data_CR$fdatscrn) &  # First CVD event AFTER screening
+  (Data_CR$first_cvd_date == Data_CR$d_stroke),  # Stroke is the first event
+  1, 0)
 
 
