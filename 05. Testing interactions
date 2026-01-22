@@ -79,7 +79,7 @@ anova(cox_cvd_3_uk_sex_interaction, cox_cvd_3_uk_sex, test = "LRT")
 #Testing for the proportional hazard assumption
 ph_test3_sex <- cox.zph(cox_cvd_3_uk_sex_interaction)
 
-#5.1.3) BMI (<25, 25-30, ≥30 kg/m²) 
+#5.1.3) BMI---> (<25, 25-30, ≥30 kg/m²) 
 
 ####Model 1:  with BMI as an effect modifier
 cox_cvd_1_uk_bmi_interaction <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB*bmi_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat,  data = sample_cvd_uk)
@@ -118,7 +118,7 @@ ph_test3_bmi <- cox.zph(cox_cvd_3_uk_bmi_interaction)
 # 5.2.0)  -------------------------------## **Cohort study: Whitehall II** ##---------------------------------------------------------------------
 ###--------------------------------------------------------------------------------------------------------------------------------------------###
 
-#5.1.1) Age --> (<70, ≥70 years) 
+#5.2.1) Age --> (<70, ≥70 years) 
 
 ####Model 1:  with age as an effect modifier
 cox_cvd_1_age_interaction <- coxph(Surv(follow_up_time, cvd_event) ~ SWCprofiles_WII* fage_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat,  data = sample_cvd)
@@ -157,7 +157,7 @@ ph_test3 <- cox.zph(cox_cvd_3_age_interaction)
 ph_test3_1 <- cox.zph(cox_cvd_3_age)
 
 
-#5.1.2)Sex--> (female, male)
+#5.2.2)Sex--> (female, male)
 
 ####Model 1:  with sex as an effect modifier
 cox_cvd_1_sex_interaction <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII* sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat, data = sample_cvd)
@@ -194,7 +194,7 @@ anova(cox_cvd_3_sex_interaction, cox_cvd_3_sex, test = "LRT")
 ph_test_sex3 <- cox.zph(cox_cvd_3_sex_interaction)
 
 
-#5.1.3) BMI (<25, 25-30, ≥30 kg/m²) 
+#5.2.3) BMI (<25, 25-30, ≥30 kg/m²) 
 
 ####Model 1:  with BMI as an effect modifier
 cox_cvd_1_bmi_interaction <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII* fbmi_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat,  data = sample_cvd)
