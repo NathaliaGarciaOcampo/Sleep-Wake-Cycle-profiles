@@ -217,11 +217,19 @@ Data_UKB$Stroke_incidence_UK <- ifelse(
     Data_UKB$first_cvd_date_UK > Data_UKB$doacc &
     Data_UKB$first_cvd_date_UK == Data_UKB$stroke_out_sro_date, 1, 0)
 
+## 2.7)  Final population of study
+missing_participants <- Data_UKB[is.na(Data_UKB$smoking)| is.na(Data_UKB$livingalone) | is.na(Data_UKB$alcohol_3cat) | is.na(Data_UKB$fruitveg)  | is.na(Data_UKB$bmi_cat) | is.na(Data_UKB$work_cat), ] 
+Data_CVD_uk <- Data_UKB[Data_UKB$CVD_prevalence_UK != 1, ] #Removing prevalent CVD cases
+sample_cvd_uk <- Data_CVD_uk[complete.cases(Data_CVD_uk[, c("livingalone", "smoking", "alcohol_3cat", "fruitveg", "bmi_cat", "work_cat")]), ]
+
+## 2.8) Downloading the processed dataset 
+write.csv(sample_cvd_uk, "path.csv")
+
 ###----------------------------------------------------------------------------------------------------------###
   -------------------------------## **Cohort study: Whitehall II** ##------------------------------------------
 ###----------------------------------------------------------------------------------------------------------###
 
-## 2.7) Socio-demographic and behavioural factors:
+## 2.9) Socio-demographic and behavioural factors:
 
 #Age:
 #Numerical variable:
@@ -265,7 +273,7 @@ Data_CR$ffruit_cat[Data_CR$ffruitvg_i != "8: 2+/day" & Data_CR$ffruitvg_i != "8:
 Data_CR$ffruit_cat <-factor(Data_CR$ffruit_cat, levels = c(0,1), labels = c("< 2 times per day", ">= 2 times per day"))
 
 
-## 2.8) General health related factors
+## 2.10) General health related factors
 
 #Intake of Central Nervous System (CNS) medications
 Data_CR$fcnsdrg_i <-factor(Data_CR$fcnsdrg_i, levels = c("0","1"), labels = c("No intake", "Intake"))
@@ -303,7 +311,7 @@ Data_CR$liver_p <-factor(Data_CR$liver_p, levels = c("0","1"), labels = c("No Di
 Data_CR$arth_p<-factor(Data_CR$arth_p, levels = c("0","1"), labels = c("No Disease", "Disease"))
 
 
-## 2.9) Cardiometabolic risk factors
+## 2.11) Cardiometabolic risk factors
 
 #BMI
 #Numerical variable
@@ -325,13 +333,13 @@ Data_CR$hypten_p<-factor(Data_CR$hypten_p, levels = c("0","1"), labels = c("No D
 Data_CR$hyplip<-factor(Data_CR$hyplip, levels = c("0", "1"), labels = c("No Hyperlipidaemia", "Hyperlipidaemia"))
 
 
-## 2.10) Exposure: SWC profiles
+## 2.12) Exposure: SWC profiles
 Data_CR$SWCprofiles_WII <- factor(Data_CR$SWCprofiles_WII, levels = c("SWCprofiles_WIIProfile 1","SWCprofiles_WIIProfile 2", "SWCprofiles_WIIProfile 3", "SWCprofiles_WIIProfile 4", "SWCprofiles_WIIProfile 5", "SWCprofiles_WIIProfile 6", "SWCprofiles_WIIProfile 7", "SWCprofiles_WIIProfile 8", "SWCprofiles_WIIProfile 9" ))
 #Setting the reference:
 Data_CR$SWCprofiles_WII <- relevel(Data_CR$SWCprofiles_WII, ref = "SWCprofiles_WIIProfile 3")
 
 
-## 2.11) Creating prevalent disease indicators:
+## 2.13) Creating prevalent disease indicators:
 
 #Prevalent CHD cases at enrollment date:
 Data_CR$chd_prevalence <- ifelse(
@@ -354,7 +362,7 @@ Data_CR$cvd_prevalence <- ifelse(
     (!is.na(Data_CR$chd_prevalence) & Data_CR$chd_prevalence == 1) | 
     (!is.na(Data_CR$h_failure_prevalence) & Data_CR$h_failure_prevalence == 1), 1, 0)
 
-## 2.12) Creating incident disease indicators:
+## 2.14) Creating incident disease indicators:
 
 ##First CVD event:
 #The outcome of interest (CVD) was defined as the incidence of the first fatal or non-fatal CHD, HF and stroke. 
@@ -394,4 +402,12 @@ Data_CR$stroke_incidence_final <- ifelse(
   (Data_CR$first_cvd_date == Data_CR$d_stroke),  # Stroke is the first event
   1, 0)
 
+## 2.15) Final study population
+
+missing <- Data_CR[is.na(Data_CR$hyplip)| is.na(Data_CR$disability),]
+Data_CVD <- Data_CR[Data_CR$cvd_prevalence != "Prevalent CVD case", ] #Removing prevalent CVD cases
+sample_cvd <- Data_CVD[complete.cases(Data_CVD[, c("hyplip", "disability")]), ]
+
+## 2.16) Downloading the processed dataset 
+write.csv(sample_cvd, "path.csv")
 
