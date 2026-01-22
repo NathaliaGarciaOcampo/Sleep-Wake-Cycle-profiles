@@ -1,0 +1,230 @@
+## 5.0 ) Cox proportional hazards regression for testing interactions of the SWC profiles with age (<70, ≥70 years), sex (female, male), and BMI (<25, 
+203 25-30, ≥30 kg/m²) on the risk of CVD event.
+
+###----------------------------------------------------------------------------------------------------------###
+  #5.1.0)   -------------------------------## **Cohort study: UK Biobank** ##---------------------------------
+###----------------------------------------------------------------------------------------------------------###
+
+ #5.1.1) Age --> (<70, ≥70 years) 
+
+####Model 1:  with age as an effect modifier
+cox_cvd_1_uk_age_interaction <- coxph(Surv( follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB*age_inclusion_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat,  data = sample_cvd_uk)
+summary(cox_cvd_1_uk_age_interaction)
+####Model 1:  without age as an effect modifier
+cox_cvd_1_uk_age <- coxph(Surv( follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB + age_inclusion_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat,  data = sample_cvd_uk)
+summary(cox_cvd_1_uk_age)
+#Applying the Likelihood Ratio Test (LRT) --> to formally test whether including interaction (age) improves overall model fit.
+anova(cox_cvd_1_uk_age_interaction, cox_cvd_1_uk_age, test = "LRT") 
+#Testing for the proportional hazard assumption
+ph_test1_age_interaction <- cox.zph(cox_cvd_1_uk_age_interaction)
+ph_test1_age <- cox.zph(cox_cvd_1_uk_age)
+
+####Model 2:  with age as an effect modifier
+cox_cvd_2_uk_age_interaction <- coxph(Surv( follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB*age_inclusion_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = sample_cvd_uk)
+summary(cox_cvd_2_uk_age_interaction)
+####Model 2:  without age as an effect modifier
+cox_cvd_2_uk_age <- coxph(Surv( follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB + age_inclusion_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = sample_cvd_uk)
+summary(cox_cvd_2_uk_age)
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_2_uk_age_interaction, cox_cvd_2_uk_age, test = "LRT") 
+#Testing for the proportional hazard assumption
+ph_test2_age_interaction <- cox.zph(cox_cvd_2_uk_age_interaction)
+ph_test2_age <- cox.zph(cox_cvd_2_uk_age)
+
+####Model 3:  with age as an effect modifier
+cox_cvd_3_uk_age_interaction <- coxph(Surv( follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB*age_inclusion_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = sample_cvd_uk)
+summary(cox_cvd_3_uk_age_interaction)
+####Model 3:  without age as an effect modifier
+cox_cvd_3_uk_age <- coxph(Surv( follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB + age_inclusion_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = sample_cvd_uk)
+summary(cox_cvd_3_uk_age)
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_3_uk_age_interaction, cox_cvd_3_uk_age, test = "LRT") 
+#Testing for the proportional hazard assumption
+ph_test2_age_interaction <- cox.zph(cox_cvd_3_uk_age_interaction)
+ph_test2_age <- cox.zph(cox_cvd_3_uk_age)
+
+
+#5.1.2)Sex--> (female, male)
+
+####Model 1:  with sex as an effect modifier
+cox_cvd_1_uk_sex_interaction <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB*sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat,  data = sample_cvd_uk)
+summary(cox_cvd_1_uk_sex_interaction)
+####Model 1:  without sex as an effect modifier
+cox_cvd_1_uk_sex <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat,  data = sample_cvd_uk)
+summary(cox_cvd_1_uk_sex)
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_1_uk_sex_interaction, cox_cvd_1_uk_sex, test = "LRT") 
+#Testing for the proportional hazard assumption
+ph_test1_sex <- cox.zph(cox_cvd_1_uk_sex_interaction)
+
+####Model 2:  with sex as an effect modifier
+cox_cvd_2_uk_sex_interaction <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB*sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = sample_cvd_uk)
+summary(cox_cvd_2_uk_sex_interaction)
+####Model 2:  without sex as an effect modifier
+cox_cvd_2_uk_sex <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = sample_cvd_uk)
+summary(cox_cvd_2_uk_sex)
+#Applying the Likelihood Ratio Test (LRT)
+anova(cox_cvd_2_uk_sex_interaction, cox_cvd_2_uk_sex, test = "LRT") 
+#Testing for the proportional hazard assumption
+ph_test2_sex <- cox.zph(cox_cvd_2_uk_sex_interaction)
+
+####Model 3:  with sex as an effect modifier
+cox_cvd_3_uk_sex_interaction <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB*sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + bmi_cat + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = sample_cvd_uk)
+summary(cox_cvd_3_uk_sex_interaction)
+####Model 3:  without sex as an effect modifier
+cox_cvd_3_uk_sex <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + bmi_cat + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = sample_cvd_uk)
+summary(cox_cvd_3_uk_sex)
+#Applying the Likelihood Ratio Test (LRT)
+anova(cox_cvd_3_uk_sex_interaction, cox_cvd_3_uk_sex, test = "LRT") 
+#Testing for the proportional hazard assumption
+ph_test3_sex <- cox.zph(cox_cvd_3_uk_sex_interaction)
+
+#5.1.3) BMI (<25, 25-30, ≥30 kg/m²) 
+
+####Model 1:  with BMI as an effect modifier
+cox_cvd_1_uk_bmi_interaction <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB*bmi_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat,  data = sample_cvd_uk)
+summary(cox_cvd_1_uk_bmi_interaction)
+####Model 1:  without BMI as an effect modifier
+cox_cvd_1_uk_bmi <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB +bmi_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat,  data = sample_cvd_uk)
+summary(cox_cvd_1_uk_bmi)
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_1_uk_bmi_interaction, cox_cvd_1_uk_bmi, test = "LRT")
+#Testing for the proportional hazard assumption
+ph_test1_bmi <- cox.zph(cox_cvd_1_uk_bmi_interaction)
+
+####Model 2:  with BMI as an effect modifier
+cox_cvd_2_uk_bmi_interaction <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB*bmi_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = sample_cvd_uk)
+summary(cox_cvd_2_uk_bmi_interaction)
+####Model 2:  without BMI as an effect modifier
+cox_cvd_2_uk_bmi <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB + bmi_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = sample_cvd_uk)
+summary(cox_cvd_2_uk_bmi)
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_2_uk_bmi_interaction, cox_cvd_2_uk_bmi, test = "LRT")
+#Testing for the proportional hazard assumption
+ph_test2_bmi <- cox.zph(cox_cvd_2_uk_bmi_interaction)
+
+####Model 3:  with BMI as an effect modifier
+cox_cvd_3_uk_bmi_interaction <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB*bmi_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = sample_cvd_uk)
+summary(cox_cvd_3_uk_bmi_interaction)
+####Model 3:  without BMI as an effect modifier
+cox_cvd_3_uk_bmi<- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB +bmi_cat + sex + edu + livingalone + work_cat + smoking + alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = sample_cvd_uk)
+summary(cox_cvd_3_uk_bmi)
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_3_uk_bmi_interaction, cox_cvd_3_uk_bmi, test = "LRT")
+#Testing for the proportional hazard assumption
+ph_test3_bmi <- cox.zph(cox_cvd_3_uk_bmi_interaction)
+
+###-------------------------------------------------------------------------------------------------------------------------------------------###
+# 5.2.0)  -------------------------------## **Cohort study: Whitehall II** ##---------------------------------------------------------------------
+###--------------------------------------------------------------------------------------------------------------------------------------------###
+
+#5.1.1) Age --> (<70, ≥70 years) 
+
+####Model 1:  with age as an effect modifier
+cox_cvd_1_age_interaction <- coxph(Surv(follow_up_time, cvd_event) ~ SWCprofiles_WII* fage_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat,  data = sample_cvd)
+summary(cox_cvd_1_age_interaction) 
+####Model 1:  without age as an effect modifier
+cox_cvd_1_age<- coxph(Surv(follow_up_time, cvd_event) ~ SWCprofiles_WII + fage_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat,  data = sample_cvd)
+summary(cox_cvd_1_age) 
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_1_age_interaction, cox_cvd_1_age, test = "LRT")
+#Testing for the proportional hazard assumption
+ph_test1_ <- cox.zph(cox_cvd_1_age_interaction)
+ph_test_2 <- cox.zph(cox_cvd_1_age)
+
+####Model 2:  with age as an effect modifier
+cox_cvd_2_age_interaction <- coxph(Surv(follow_up_time, cvd_event) ~ SWCprofiles_WII* fage_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability,  data = sample_cvd)
+summary(cox_cvd_2_age_interaction)
+####Model 2:  without age as an effect modifier
+cox_cvd_2_age <- coxph(Surv(follow_up_time, cvd_event) ~ SWCprofiles_WII + fage_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability,  data = sample_cvd)
+summary(cox_cvd_2_age)
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_2_age_interaction, cox_cvd_2_age, test = "LRT")
+#Testing for the proportional hazard assumption
+ph_test2 <- cox.zph(cox_cvd_2_age_interaction)
+ph_test2_2 <- cox.zph(cox_cvd_2_age)
+
+####Model 3:  with age as an effect modifier
+cox_cvd_3_age_interaction <- coxph(Surv(follow_up_time, cvd_event) ~ SWCprofiles_WII* fage_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability  + hypten_p + diabetes_p + hyplip ,  data = sample_cvd)
+summary(cox_cvd_3_age_interaction) 
+####Model 3:  without age as an effect modifier
+cox_cvd_3_age <- coxph(Surv(follow_up_time, cvd_event) ~ SWCprofiles_WII + fage_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability  + hypten_p + diabetes_p + hyplip ,  data = sample_cvd)
+summary(cox_cvd_3_age)
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_3_age_interaction, cox_cvd_3_age, test = "LRT")
+#Testing for the proportional hazard assumption
+ph_test3 <- cox.zph(cox_cvd_3_age_interaction)
+ph_test3_1 <- cox.zph(cox_cvd_3_age)
+
+
+#5.1.2)Sex--> (female, male)
+
+####Model 1:  with sex as an effect modifier
+cox_cvd_1_sex_interaction <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII* sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat, data = sample_cvd)
+summary(cox_cvd_1_sex_interaction)
+####Model 1:  without sex as an effect modifier
+cox_cvd_1_sex <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat,  
+                   data = sample_cvd)
+summary(cox_cvd_1_sex) 
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_1_sex_interaction, cox_cvd_1_sex, test = "LRT")
+#Testing for the proportional hazard assumption
+ph_test_sex <- cox.zph(cox_cvd_1_sex_interaction)
+
+####Model 2:  with sex as an effect modifier
+cox_cvd_2_sex_interaction <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII* sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability,  data = sample_cvd)
+summary(cox_cvd_2_sex_interaction)
+####Model 2:  without sex as an effect modifier
+cox_cvd_2_sex <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability,  data = sample_cvd)
+summary(cox_cvd_2_sex) 
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_2_sex_interaction, cox_cvd_2_sex, test = "LRT")
+#Testing for the proportional hazard assumption
+ph_test_sex2 <- cox.zph(cox_cvd_2_sex_interaction)
+
+####Model 3:  with sex as an effect modifier
+cox_cvd_3_sex_interaction <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII* sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability + fbmi_cat + hypten_p + diabetes_p + hyplip ,  data = sample_cvd)
+summary(cox_cvd_3_sex_interaction) 
+####Model 3:  without sex as an effect modifier
+cox_cvd_3_sex <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability + fbmi_cat + hypten_p + diabetes_p + hyplip ,  data = sample_cvd)
+summary(cox_cvd_3_sex) 
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_3_sex_interaction, cox_cvd_3_sex, test = "LRT")
+#Testing for the proportional hazard assumption
+ph_test_sex3 <- cox.zph(cox_cvd_3_sex_interaction)
+
+
+#5.1.3) BMI (<25, 25-30, ≥30 kg/m²) 
+
+####Model 1:  with BMI as an effect modifier
+cox_cvd_1_bmi_interaction <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII* fbmi_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat,  data = sample_cvd)
+summary(cox_cvd_1_bmi_interaction) 
+####Model 1:  without BMI as an effect modifier
+cox_cvd_1_bmi<- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII + fbmi_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat,  data = sample_cvd)
+summary(cox_cvd_1_bmi) 
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_1_bmi_interaction, cox_cvd_1_bmi, test = "LRT") 
+#Testing for the proportional hazard assumption
+ph_test_bmi1 <- cox.zph(cox_cvd_1_bmi_interaction)
+
+####Model 2:  with BMI as an effect modifier
+cox_cvd_2_bmi_interaction <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII* fbmi_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability,  data = sample_cvd)
+summary(cox_cvd_2_bmi_interaction)
+####Model 2:  without BMI as an effect modifier
+cox_cvd_2_bmi <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII + fbmi_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability,  data = sample_cvd)
+summary(cox_cvd_2_bmi) 
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_2_bmi_interaction, cox_cvd_2_bmi, test = "LRT")
+#Testing for the proportional hazard assumption
+ph_test_bmi2 <- cox.zph(cox_cvd_2_bmi_interaction)
+
+####Model 3:  with BMI as an effect modifier
+cox_cvd_3_bmi_interaction <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII* fbmi_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability + hypten_p + diabetes_p + hyplip ,  data = sample_cvd)
+summary(cox_cvd_3_bmi_interaction) 
+####Model 3:  without BMI as an effect modifier
+cox_cvd_3_bmi <- coxph(Surv(fage_si, fage_si + follow_up_time, cvd_event) ~ SWCprofiles_WII + fbmi_cat + sex + edu + fstatus_cat + work + fesmoke_i + ffruit_cat + funitalcohol_cat + multimorbidity_index + ghq_cat + fcnsdrg_i + disability + hypten_p + diabetes_p + hyplip ,  data = sample_cvd)
+summary(cox_cvd_3_bmi) 
+#Applying the Likelihood Ratio Test (LRT) 
+anova(cox_cvd_3_bmi_interaction, cox_cvd_3_bmi, test = "LRT")
+#Testing for the proportional hazard assumption
+ph_test_bmi3 <- cox.zph(cox_cvd_3_bmi_interaction)
