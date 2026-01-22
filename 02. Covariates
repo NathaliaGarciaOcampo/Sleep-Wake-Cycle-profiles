@@ -49,7 +49,7 @@ Data_UKB$fruitveg_cat <-factor(Data_UKB$fruitveg_cat, levels = c(0,1), labels = 
 #Intake of Central Nervous System (CNS) medications
 Data_UKB$CNS <- factor(Data_UKB$CNS, levels = c("0","1"), labels = c("No intake", "Intake"))
 
-#Number of chronic diseases
+#Chronic diseases
 #Parkinson
 Data_UKB$parkinson_out_sro[is.na(Data_UKB$parkinson_out_sro)] <- 0
 Data_UKB$parkinson_UK = Data_UKB$parkinson_out_sro
@@ -267,6 +267,9 @@ Data_CR$ffruit_cat <-factor(Data_CR$ffruit_cat, levels = c(0,1), labels = c("< 2
 
 ## 2.8) General health related factors
 
+#Intake of Central Nervous System (CNS) medications
+Data_CR$fcnsdrg_i <-factor(Data_CR$fcnsdrg_i, levels = c("0","1"), labels = c("No intake", "Intake"))
+
 #Number of chronic conditions:
 Data_CR$multimorbidity <- apply(Data_CR[, c("park_p", "copd_p", "depression_p", "md_p", "cancer_p", "liver_p", "arth_p")], 
                                       1, function(x) ifelse(any(is.na(x)), NA, sum(x)))
@@ -276,10 +279,8 @@ Data_CR$multimorbidity_index <- factor(
          ifelse(Data_CR$multimorbidity == 1, "1 disease", ">=2 diseases")),
   levels = c("0 diseases", "1 disease", ">=2 diseases"))
 
-#Intake of Central Nervous System (CNS) medications
-Data_CR$fcnsdrg_i <-factor(Data_CR$fcnsdrg_i, levels = c("0","1"), labels = c("No intake", "Intake"))
 
-#Number of chronic diseases
+#Chronic diseases
 #Parkinson
 Data_CR$park_p<-factor(Data_CR$park_p, levels = c("0","1"), labels = c("No Disease", "Disease"))
 
