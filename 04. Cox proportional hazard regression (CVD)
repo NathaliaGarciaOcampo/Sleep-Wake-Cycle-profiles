@@ -25,6 +25,10 @@ sample_cvd_uk$cvd_event_uk <- ifelse(
   !is.na(sample_cvd_uk$first_cvd_date_UK) & # the date of first cvd event is different from NA
   sample_cvd_uk$first_cvd_date_UK == sample_cvd_uk$end_date_cvd, 1, 0) # The first cvd event date is the same as the end date that was previously created
 
+###------------------------------------------------------------------------------------------------------------------------------------------------
+##Part 1 --> Table 2 Cox proportional hazards regression for the association of sleep-wake cycle profiles with incident cardiovascular disease in the UKB accelerometer sub-study.
+#Note: The results from these models were used to generate this table, which was formatted separately for publication. This script reproduces the statistical models underlying the reported results.
+
 #4.1.3)Cox proportional hazard regressions, using age as time-scale:
 
 #Model 1:
@@ -44,6 +48,7 @@ cox_cvd_3_uk <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk,
 summary(cox_cvd_3_uk)
 #Testing for the Proportional hazards assumption 
 ph_test3_CVD <- cox.zph(cox_cvd_3_uk)
+#---------------------------------------------------------------------------------------------------------------------------------------------------------###
 
 ###----------------------------------------------------------------------------------------------------------###
   #4.2.0)   -------------------------------## **Cohort study: Whitehall II** ##---------------------------------
@@ -68,6 +73,10 @@ sample_cvd$follow_up_time <- as.numeric(
 sample_cvd$cvd_event <- ifelse(
 !is.na(sample_cvd$first_cvd_date) & sample_cvd$first_cvd_date == sample_cvd$end_date_cvd_WII, 1, 0)
 
+###------------------------------------------------------------------------------------------------------------------------------------------------
+##Part 2 --> Table 2 Cox proportional hazards regression for the association of sleep-wake cycle profiles with incident cardiovascular disease in the WII accelerometer sub-study.
+#Note: The results from these models were used to generate this table, which was formatted separately for publication. This script reproduces the statistical models underlying the reported results.
+
 #4.2.3)Cox proportional hazard regressions, using age as time-scale:
 
 #Model 1:
@@ -88,5 +97,5 @@ summary(cox_cvd_3)
 #Testing for the Proportional hazards assumption 
 ph_test3_CVD_WII <- cox.zph(cox_cvd_3)
 
-
+##----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------##
 
