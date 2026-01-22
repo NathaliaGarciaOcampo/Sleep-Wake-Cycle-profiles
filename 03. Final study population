@@ -14,7 +14,7 @@ sample_cvd_uk <- Data_CVD_uk[complete.cases(Data_CVD_uk[, c("livingalone", "smok
   -------------------------------## **Cohort study: Whitehall II** ##------------------------------------------
 ###----------------------------------------------------------------------------------------------------------###
 
-missing_participants <- Data_CR[is.na(Data_UKB$fage_cat)|is.na(Data_CR$sex)|is.na(Data_CR$edu)| is.na(Data_CR$fstatus_cat)| is.na(Data_CR$work) | is.na(Data_CR$fesmoke_i) | is.na(Data_CR$funitalcohol_cat ) | is.na(Data_CR$ffruit_cat) | is.na(Data_CR$fcnsdrg_i ) | is.na(Data_CR$multimorbidity) | is.na(Data_CR$disability) |  is.na(Data_CR$fbmi_cat) | is.na(Data_CR$diabetes_p) | is.na(Data_CR$hypten_p) | is.na(Data_CR$hyplip), ] 
+missing_participants <- Data_CR[is.na(Data_CR$fage_cat)|is.na(Data_CR$sex)|is.na(Data_CR$edu)| is.na(Data_CR$fstatus_cat)| is.na(Data_CR$work) | is.na(Data_CR$fesmoke_i) | is.na(Data_CR$funitalcohol_cat ) | is.na(Data_CR$ffruit_cat) | is.na(Data_CR$fcnsdrg_i ) | is.na(Data_CR$multimorbidity) | is.na(Data_CR$disability) |  is.na(Data_CR$fbmi_cat) | is.na(Data_CR$diabetes_p) | is.na(Data_CR$hypten_p) | is.na(Data_CR$hyplip), ] 
 Data_CVD <- Data_CR[Data_CR$cvd_prevalence != "Prevalent CVD case", ] #Removing prevalent CVD cases
 sample_cvd <- Data_CVD[complete.cases(Data_CVD[, c("hyplip", "disability")]), ]
 
