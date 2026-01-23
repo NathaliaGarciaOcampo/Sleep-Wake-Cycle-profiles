@@ -32,7 +32,7 @@ Step 3: Statistical analysis
    - Analysis excluding fatal CVD events, to test whether associations were driven by fatal events (Table S4 of the manuscript). (07. Cox proportional hazard regression (non-fatal CVD))
      
 - Secondary analysis:
-   - Analysis on the association of SWC profiles with coronary heart disease (CHD), heart failure (HF), and stroke analysed separately to examine disease-specific associations (Table S5 of the manuscript). (08. Cox proportional hazard regression (CVD subtypes)).
+   - Analysis on the association of SWC profiles with coronary heart disease (CHD), heart failure (HF), and stroke analysed separately to examine disease-specific associations (Figure 2 and table S5 of the manuscript). (08. Cox proportional hazard regression (CVD subtypes)).
 
 Manuscript information
 -
