@@ -1,7 +1,7 @@
 ## 6.0) Cox proportional hazards regression for the association of sleep-wake cycle profiles with incident cardiovascular disease in the UKB and WII accelerometer sub-studies, using profiles 1 and 6 as the reference group.
 
 ###----------------------------------------------------------------------------------------------------------###
-  #-------------------------------## **Cohort study: UK Biobank** ##------------------------------------------
+  # 6.1.0) --------------------------## **Cohort study: UK Biobank** ##-------------------------------------
 ###----------------------------------------------------------------------------------------------------------###
 
 ###------------------------------------------------------------------------------------------------------------------------------------------------
@@ -90,7 +90,3 @@ summary(cox_cvd_3_profile_6)
 sample_cvd$SWCprofiles_WII <- relevel(sample_cvd$SWCprofiles_WII, ref = "RAR + LIPA + Sleep +")
 sample_cvd$SWCprofiles_WII <- factor( sample_cvd$SWCprofiles_WII, levels = c("RAR ++ PA ++",   "RAR + LIPA + Sleep -",  "RAR + LIPA + Sleep +", "MVPA ++",
              "RAR - Chronotype --",  "RAR - PA - Sleep +",  "RAR - PA - Sleep --",  "RAR - PA + Restless sleep", "RAR -- PA --"))
-
-
-
-
