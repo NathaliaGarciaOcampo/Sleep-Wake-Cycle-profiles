@@ -1,102 +1,104 @@
 
-#Creation of follow_up time and event indicator variables
+# 7.0) Cox proportional hazards models for associations between sleep–wake cycle profiles and cardiovascular disease subtypes
 
-###--------------------------###
- ## Cohort study: UK Biobank ##
-###--------------------------###
+###----------------------------------------------------------------------------------------------------------###
+  # 7.0) --------------------------## **Cohort study: UK Biobank** ##-------------------------------------
+###----------------------------------------------------------------------------------------------------------###
+###------------------------------------------------------------------------------------------------------------------------------------------------
 
-#Follow_up time: Participants were censored at the first date of their CVD event. 
+#Note: Follow_up time: Participants were censored at the first date of their CVD event. 
 #For example, if CHD was the outcome of interest and a participant experienced a HF event before CHD or the end of follow-up, 
 #the censoring time was the date of HF.
 
-#CHD event indicator 
-Data$CHD_event_UK <- ifelse(
-  Data$CHD_incidence_UK == 1 &
-    !is.na(Data$first_cvd_date_UK) & !is.na(Data$chd_out_sro_date) &
-    Data$first_cvd_date_UK == Data$chd_out_sro_date & #First CVD date and CHD date are the same
-    Data$first_cvd_date_UK <= end_follow_up_date_CVD_uk, 1, 0) #First CVD date within observed follow-up
+# 7.1) Definition of cardiovascular disease event indicators
+#7.1.1) CHD event indicator 
+sample_cvd_uk$CHD_event_UK <- ifelse(
+  sample_cvd_uk$CHD_incidence_UK == 1 &
+    !is.na(sample_cvd_uk$first_cvd_date_UK) & !is.na(sample_cvd_uk$chd_out_sro_date) &
+    sample_cvd_uk$first_cvd_date_UK == sample_cvd_uk$chd_out_sro_date & #First CVD date and CHD date are the same
+    sample_cvd_uk$first_cvd_date_UK <= end_follow_up_date_CVD_uk, 1, 0) #First CVD date within observed follow-up
 
-#HF event indicator
-Data$heart_f_event_uk <- ifelse(
-  Data$HF_incidence_UK == 1 & 
-    !is.na(Data$first_cvd_date_UK) & !is.na(Data$hfailure_out_sro_date) &
-    Data$first_cvd_date_UK == Data$hfailure_out_sro_date &
-    Data$first_cvd_date_UK <= end_follow_up_date_CVD_uk, 1, 0)
+#7.1.2) HF event indicator
+sample_cvd_uk$heart_f_event_uk <- ifelse(
+  sample_cvd_uk$HF_incidence_UK == 1 & 
+    !is.na(sample_cvd_uk$first_cvd_date_UK) & !is.na(sample_cvd_uk$hfailure_out_sro_date) &
+    sample_cvd_uk$first_cvd_date_UK == sample_cvd_uk$hfailure_out_sro_date &
+    sample_cvd_uk$first_cvd_date_UK <= end_follow_up_date_CVD_uk, 1, 0)
 
-#Stroke event indicator
-Data$stroke_event_uk <- ifelse(
-  Data$Stroke_incidence_UK == 1 & 
-    !is.na(Data$first_cvd_date_UK) & !is.na(Data$stroke_out_sro_date) &
-    Data$first_cvd_date_UK == Data$stroke_out_sro_date &
-    Data$first_cvd_date_UK <= end_follow_up_date_CVD_uk, 1, 0)
+#7.1.3) Stroke event indicator
+sample_cvd_uk$stroke_event_uk <- ifelse(
+  sample_cvd_uk$Stroke_incidence_UK == 1 & 
+    !is.na(sample_cvd_uk$first_cvd_date_UK) & !is.na(sample_cvd_uk$stroke_out_sro_date) &
+    sample_cvd_uk$first_cvd_date_UK == sample_cvd_uk$stroke_out_sro_date &
+    sample_cvd_uk$first_cvd_date_UK <= end_follow_up_date_CVD_uk, 1, 0)
 
-##Cox models CVD subtypes    
-###CHD 
-#Cox proportional hazard models, using age as time-scale:
+###----------------------------------------------------------------------------------------------------------###
+## Table S5. Hazard ratios from Cox proportional hazard regression for the association between sleep-wake cycle profiles and CVD events in the UKB accelerometer sub-study
+#Note: The results from these models were used to generate this table, which was formatted separately for publication. This script reproduces the statistical models underlying the reported results.
+
+#7.2)  Cox proportional hazard regressions, using age as time-scale:
+
+#7.2.1) Coronary heart disease
 #Model 1: 
-cox_cvd_1_uk_CHD<- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, CHD_event_UK) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat +   fruitveg_cat,  data = Data)
+cox_cvd_1_uk_CHD<- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, CHD_event_UK) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat +   fruitveg_cat,  data = sample_cvd_uk)
 summary(cox_cvd_1_uk_CHD)
 #Testing for the Proportional hazards assumption
 ph_test1_CHD <- cox.zph(cox_cvd_1_uk_CHD)
 
 #Model 2:
-cox_cvd_2_uk_CHD<- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, CHD_event_UK) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = Data)
+cox_cvd_2_uk_CHD<- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, CHD_event_UK) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = sample_cvd_uk)
 summary(cox_cvd_2_uk_CHD)
 #Testing for the Proportional hazards assumption
 ph_test2_CHD <- cox.zph(cox_cvd_2_uk_CHD)
 
 #Model 3:
-cox_cvd_3_uk_CHD<- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, CHD_event_UK) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + bmi_cat + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = Data)
+cox_cvd_3_uk_CHD<- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, CHD_event_UK) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + bmi_cat + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = sample_cvd_uk)
 summary(cox_cvd_3_uk_CHD)
 #Testing for the Proportional hazards assumption 
-ph_test3_CHD <- cox.zph(cox_cvd_2_uk_CHD)
+ph_test3_CHD <- cox.zph(cox_cvd_3_uk_CHD)
 
-###HF
-
-#Cox proportional hazard models, using age as time-scale for HF:
+#7.2.2) Heart failure
 #Model 1:
-cox_cvd_1_uk_Heart_f <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, heart_f_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat,  data = Data)
+cox_cvd_1_uk_Heart_f <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, heart_f_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat,  data = sample_cvd_uk)
 summary(cox_cvd_1_uk_Heart_f)
 #Testing for the Proportional hazards assumption
 ph_test1_HF <- cox.zph(cox_cvd_1_uk_Heart_f)
 
 #Model 2:
-cox_cvd_2_uk_Heart_f <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, heart_f_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = Data)
+cox_cvd_2_uk_Heart_f <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, heart_f_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = sample_cvd_uk)
 summary(cox_cvd_2_uk_Heart_f)
 #Testing for the Proportional hazards assumption
 ph_test2_HF <- cox.zph(cox_cvd_2_uk_Heart_f)
 
 #Model 3:
-cox_cvd_3_uk_Heart_f <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, heart_f_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + bmi_cat + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = Data)
+cox_cvd_3_uk_Heart_f <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, heart_f_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + bmi_cat + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = sample_cvd_uk)
 summary(cox_cvd_3_uk_Heart_f)
 #Testing for the Proportional hazards assumption
 ph_test3_HF <- cox.zph(cox_cvd_3_uk_Heart_f)
 
-#Stroke
-#Cox proportional hazard models, using age as time-scale for stroke:
+#7.2.3) Stroke
 #Model 1:
-cox_cvd_1_uk_stroke <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, stroke_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat,  data = Data)
+cox_cvd_1_uk_stroke <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, stroke_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat,  data = sample_cvd_uk)
 summary(cox_cvd_1_uk_stroke)
 #Testing for the Proportional hazards assumption
 ph_test1_Str <- cox.zph(cox_cvd_1_uk_stroke)
 
 #Model 2:
-cox_cvd_2_uk_stroke <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, stroke_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = Data)
+cox_cvd_2_uk_stroke <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, stroke_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index ,  data = sample_cvd_uk)
 summary(cox_cvd_2_uk_stroke)
 #Testing for the Proportional hazards assumption
 ph_test2_Str <- cox.zph(cox_cvd_2_uk_stroke)
 
 #Model 3
-cox_cvd_3_uk_stroke <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, stroke_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + bmi_cat + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = Data)
+cox_cvd_3_uk_stroke <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, stroke_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat + CNS + multimorbidity_index + bmi_cat + Hypertension_UK + Diabetes_UK + HYPLIP ,  data = sample_cvd_uk)
 summary(cox_cvd_3_uk_stroke)
 #Testing for the Proportional hazards assumption
 ph_test3_Str <- cox.zph(cox_cvd_3_uk_stroke)
 
 ###-------------------------------------------------------------------------------------------------------------------------------------------------------------###
 ## Figure 2: Hazard ratios from Cox proportional hazard models for the association between sleep-wake cycle profiles and types of cardiovascular disease events (coronary heart disease, heart failure and stroke) in the UKB accelerometer sub-study.  
-###-------------------------------------------------------------------------------------------------------------------------------------------------------------###
 
-#Preparing the results for the plot: 
+# 7.3) Extraction of hazard ratios and confidence intervals from Cox models:
 cox_results <- function(model, disease, model_label) {
   s <- summary(model)
   df <- data.frame(
@@ -106,13 +108,13 @@ cox_results <- function(model, disease, model_label) {
     Upper_CI = s$conf.int[, "upper .95"],
     p_value = s$coefficients[, "Pr(>|z|)"],
     stringsAsFactors = FALSE ) %>%
-    filter(grepl("^c9", Variable)) %>%
+    filter(grepl("^SWCprofiles_UKB", Variable)) %>%
     mutate(Model = model_label,
            Disease = disease)
            
-#Add the SWC reference profile 3 
+# 7.4) Addition of reference category 
   ref_row <- data.frame(
-    Variable = "c9Profile 3",
+    Variable = "3.RAR+/LIPA+/Sleep+ (Ref.)",
     HR = 1,
     Lower_CI = 1,
     Upper_CI = 1,
@@ -121,27 +123,29 @@ cox_results <- function(model, disease, model_label) {
     Model = model_label )
   
   df <- bind_rows(ref_row, df)
-  
+
+# 7.5) Relabeling of sleep–wake cycle profiles for plotting
   label_map <- c(
-    "c9Profile 1" = "1.RAR++/PA++",
-    "c9Profile 2" = "2.RAR+/PA+/Sleep-",
-    "c9Profile 3" = "3.RAR+/LIPA+/Sleep+ (Ref.)",
-    "c9Profile 4" = "4.MVPA+",
-    "c9Profile 5" = "5.RAR-/Chronotype--",
-    "c9Profile 6" = "6.RAR-/PA-/Sleep+",
-    "c9Profile 7" = "7.RAR-/PA-/Sleep--",
-    "c9Profile 8" = "8.RAR-/PA+/Restless sleep",
-    "c9Profile 9" = "9.RAR--/PA--/Chronotype-")
+    "RAR ++ PA ++" = "1.RAR++/PA++",
+    "RAR + PA + Sleep -" = "2.RAR+/PA+/Sleep-",
+    "RAR + LIPA + Sleep +" = "3.RAR+/LIPA+/Sleep+ (Ref.)",
+    "MVPA +" = "4.MVPA+",
+     "RAR - Chronotype --" = "5.RAR-/Chronotype--",
+    "RAR - PA - Sleep +" = "6.RAR-/PA-/Sleep+",
+    "RAR - PA - Sleep --" = "7.RAR-/PA-/Sleep--",
+    "RAR - PA + Restless sleep" = "8.RAR-/PA+/Restless sleep",
+    "RAR -- PA -- Chronotype -" = "9.RAR--/PA--/Chronotype-")
   
   df <- df %>% mutate(Label = label_map[Variable])
   df}
 
-#CHD results
+# 7.6) Aggregation of Cox model results for coronary heart disease
 results_all_CHD <- bind_rows(
   cox_results(cox_cvd_1_uk_CHD, "CORONARY HEART DISEASE", "Model 1"),
   cox_results(cox_cvd_2_uk_CHD, "CORONARY HEART DISEASE", "Model 2"),
   cox_results(cox_cvd_3_uk_CHD, "CORONARY HEART DISEASE", "Model 3"))
 
+# 7.7) Ordering of SWC profiles for CHD plot
 plot_order_CHD <- rev(c(
   "1.RAR++/PA++", "2.RAR+/PA+/Sleep-", "3.RAR+/LIPA+/Sleep+ (Ref.)", "4.MVPA+", "5.RAR-/Chronotype--", "6.RAR-/PA-/Sleep+",
   "7.RAR-/PA-/Sleep--", "8.RAR-/PA+/Restless sleep", "9.RAR--/PA--/Chronotype-"))
@@ -155,7 +159,7 @@ results_all_CHD <- results_all_CHD %>%
       p_value >= 0.05 ~  "HR >or<1, Pvalue ≥0.05",
       TRUE  ~ "Ref."))
       
-#CHD plot
+# 7.8) CHD plot
 CHD <-ggplot(results_all_CHD, aes(x = Label, y = HR, color = HR_Pvalue)) +
   geom_hline(yintercept = c(0.5,1.5,2.0,2.5, 3.0), linetype = "solid", size = 0.5, color = "#E5E5E5") +
   geom_hline(yintercept = 1, linetype = "dashed", size = 0.5) +
@@ -180,12 +184,13 @@ CHD <-ggplot(results_all_CHD, aes(x = Label, y = HR, color = HR_Pvalue)) +
     axis.title.x = element_text(size = 13, face = "bold"),
     axis.title.y = element_text(size = 13, face = "bold"))
     
-#Heart failure results
+# 7.9) Aggregation of Cox model results for heart failure
 results_all_HF <- bind_rows(
   cox_results(cox_cvd_1_uk_Heart_f, "HEART FAILURE", "Model 1"), 
   cox_results(cox_cvd_2_uk_Heart_f, "HEART FAILURE", "Model 2"),
   cox_results(cox_cvd_3_uk_Heart_f, "HEART FAILURE", "Model 3"))
 
+# 7.10) Ordering of SWC profiles for HF plot
 plot_order_HF <- rev(c(
   "1.RAR++/PA++", "2.RAR+/PA+/Sleep-", "3.RAR+/LIPA+/Sleep+ (Ref.)", "4.MVPA+", "5.RAR-/Chronotype--", "6.RAR-/PA-/Sleep+",
   "7.RAR-/PA-/Sleep--", "8.RAR-/PA+/Restless sleep", "9.RAR--/PA--/Chronotype-"))
@@ -198,7 +203,8 @@ results_all_HF <- results_all_HF %>%
       p_value < 0.05 & HR > 1  ~ "HR >1, Pvalue <0.05", 
       p_value >= 0.05 ~  "HR >or<1, Pvalue ≥0.05",
       TRUE  ~ "Ref."))
-#HF plot
+
+# 7.11) HF plot
 HF <- ggplot(results_all_HF, aes(x = Label, y = HR, color = HR_Pvalue)) +
   geom_hline(yintercept = c(0.5,1.5,2.0,2.5,3.0), linetype = "solid", size = 0.5, color = "#E5E5E5") +
   geom_hline(yintercept = 1, linetype = "dashed", size = 0.5) +
@@ -223,12 +229,13 @@ HF <- ggplot(results_all_HF, aes(x = Label, y = HR, color = HR_Pvalue)) +
     axis.title.x = element_text(size = 13, face = "bold"),
     axis.title.y = element_text(size = 13, face = "bold"))
     
-#Stroke results
+# 7.12) Aggregation of Cox model results for stroke
 results_all_Stroke <- bind_rows(
-  cox_results(cox_cvd_3_uk_stroke, "STROKE", "Model 1"),
-  cox_results(cox_cvd_3_uk_stroke, "STROKE", "Model 2"),
+  cox_results(cox_cvd_1_uk_stroke, "STROKE", "Model 1"),
+  cox_results(cox_cvd_2_uk_stroke, "STROKE", "Model 2"),
   cox_results(cox_cvd_3_uk_stroke, "STROKE", "Model 3"))
 
+# 7.13) Ordering of SWC profiles for stroke plot
 plot_order_Stroke <- rev(c(
   "1.RAR++/PA++", "2.RAR+/PA+/Sleep-", "3.RAR+/LIPA+/Sleep+ (Ref.)", "4.MVPA+", "5.RAR-/Chronotype--", "6.RAR-/PA-/Sleep+",
   "7.RAR-/PA-/Sleep--", "8.RAR-/PA+/Restless sleep","9.RAR--/PA--/Chronotype-"))
@@ -248,6 +255,7 @@ results_all_Stroke <- results_all_Stroke %>%
         "HR >or<1, Pvalue ≥0.05",
         "Ref.")))
 
+# 7.14) Stroke plot
 Stroke <- ggplot(results_all_Stroke, aes(x = Label, y = HR, color = HR_Pvalue)) +
   geom_hline(yintercept = c(0.5,1.5,2.0,2.5, 3.0), linetype = "solid", size = 0.5, color = "#E5E5E5") +
   geom_hline(yintercept = 1, linetype = "dashed", size = 0.5) +
@@ -276,12 +284,14 @@ Stroke <- ggplot(results_all_Stroke, aes(x = Label, y = HR, color = HR_Pvalue)) 
         axis.title.y = element_text(size = 13, face = "bold"))
 
     
-#Preparing the final plot
+# 7.15) Preparing the final plot
 CHD <- CHD + theme(plot.margin = unit(c(0,0,0.2,0), "cm"))
 HF <- HF + theme(plot.margin = unit(c(-0.5,0.5,0.2,-0.25), "cm"))
 Stroke <- Stroke + theme(plot.margin = unit(c(-0.5,0,0.2,0.5), "cm"))
 
+# 7.16) Assembling the multi-panel figure
 Figure_2 <- ggarrange(CHD, HF, Stroke, ncol = 1, nrow = 3, align = "v", heights = c(1.0,0.89,0.95), common.legend = TRUE, legend = "right")
 
-#To save the plot
-ggsave("//path/figure_2.svg", Figure_2, width = 500, height = 350, units = "mm")
+# 7.17) #To save the plot
+ggsave("//path/figure_2.svg", Figure_2, width = 190, height = 250, units = "mm")
+
