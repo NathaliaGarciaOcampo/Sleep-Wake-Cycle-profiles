@@ -14,7 +14,7 @@ library(survival)
   -------------------------------## **Cohort study: UK Biobank** ##------------------------------------------
 ###----------------------------------------------------------------------------------------------------------###
 
-Data_UKB <- read.csv("path/name.csv")
+# 1.1) Data_UKB <- read.csv("path/Data_UKB.csv")
 #This script assumes a preprocessed dataset containing:
 #Exposure: 36 accelerometer derived metrics and 9 sleep-wake cycle (SWC) profiles(SWCprofiles_UKB).For readers interested in the methodological details of clusters (profiles) identification, the codes are available at: "".
 #Dates: Date of enrollment (doacc), date of birth (dob),  date of mortality(mortality_date), date of CHD event(chd_out_sro_date), date of HF event(hfailure_out_sro_date), date of Stroke event(stroke_out_sro_date), date of cancer (cancer_out_sro_date), arthritis (osteoarthritis_out_sro_date), liver disease (liver_out_sro_date), chronic obstructive pulmonary disease (copd_out_sro_date), depression (depression_out_sro_date), other mental health disorders (mentaldisorders_out_sro_date) and Parkinson disease (parkinson_out_sro_date)
@@ -25,7 +25,7 @@ Data_UKB <- read.csv("path/name.csv")
   -------------------------------## **Cohort study: Whitehall II** ##------------------------------------------
 ###----------------------------------------------------------------------------------------------------------###
 
-Data_CR <- read.csv("path/name.csv")
+# 1.2) Data_CR <- read.csv("path/Data_CR.csv")
 #This script assumes a preprocessed dataset containing:
 #Exposure: 36 accelerometer derived metrics and 9 sleep-wake cycle (SWC) profiles(SWCprofiles_WII ).
 #Dates: Date of enrollment (fdatscrn), date of mortality(fup0923_s), date of CHD event(d_chd), date of HF event(d_hfailure) and date of stroke event(d_stroke).
