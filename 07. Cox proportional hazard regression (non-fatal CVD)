@@ -1,11 +1,11 @@
 
-# 8.0) Cox proportional hazards models for associations between sleep–wake cycle profiles and non-fatal cardiovascular disease 
+# 7.0) Cox proportional hazards models for associations between sleep–wake cycle profiles and non-fatal cardiovascular disease 
 
 ###----------------------------------------------------------------------------------------------------------###
-  # 8.0) --------------------------## **Cohort study: UK Biobank** ##-------------------------------------
+  # 7.0) --------------------------## **Cohort study: UK Biobank** ##-------------------------------------
 ###----------------------------------------------------------------------------------------------------------###
 
-#8.1) Excluding CVD fatal cases
+# 7.1) Excluding CVD fatal cases
 sample_cvd_sensitivity_nofatal_uk <- sample_cvd_uk[
   !(sample_cvd_uk$cvd_event_uk == 1 & sample_cvd_uk$fatal_CVD_uk == 1),]
 
@@ -13,7 +13,7 @@ sample_cvd_sensitivity_nofatal_uk <- sample_cvd_uk[
 Table S4. Hazard ratios from Cox proportional hazard regression for the association between sleep-wake cycle profiles and incident non-fatal CVD in the UKB accelerometer sub-study.
 #Note: The results from these models were used to generate this table, which was formatted separately for publication. This script reproduces the statistical models underlying the reported results.
 
-#8.2) Cox proportional hazards regression analyses using age as the time scale:
+# 7.2) Cox proportional hazards regression analyses using age as the time scale:
 
 ##Model 1:
 cox_cvd_1_uk <- coxph(Surv(age_inclusion, age_inclusion + follow_up_time_cvd_uk, cvd_event_uk) ~ SWCprofiles_UKB  + sex + edu + livingalone + work_cat + smoking +alcohol_3cat + fruitveg_cat,  data = sample_cvd_sensitivity_nofatal_uk)
