@@ -23,13 +23,13 @@ Step 2: Exploratory analysis
 
 Step 3: Statistical analysis 
 - 
-- Main analysis: 
+- Main analysis:
     - Analysis on the association of SWC profiles with incident CVD using Cox proportional hazard models with age as time-scale (Table 2 of the manuscript). (04. Cox proportional hazard regression (CVD))
     - Anaysis testing interactions of the SWC profiles with age (<70, ≥70 years), sex (female, male), and BMI (<25, 25-30, ≥30 kg/m²) on the risk of CVD event. (05. Testing interactions)
 - Sensitivity analysis:  
    - Analysis changing the reference group from SWC profile 3 to profiles 1 and 6 (Table 3 of the manuscript). (06. Cox proportional hazard regression (CVD) profiles 1 & 6 as the reference group)
    - Analysis excluding fatal CVD events, to test whether associations were driven by fatal events (Table S4 of the manuscript). (07. Cox proportional hazard regression (non-fatal CVD))
-Secondary analysis:
+-Secondary analysis:
    - Analysis on the association of SWC profiles with coronary heart disease (CHD), heart failure (HF), and stroke analysed separately to examine disease-specific associations (Table S5 of the manuscript). (08. Cox proportional hazard regression (CVD subtypes)).
 
 Manuscript information
