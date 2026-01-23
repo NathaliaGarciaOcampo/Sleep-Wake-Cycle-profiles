@@ -3,6 +3,11 @@ library(dplyr)
 library(tidyr) 
 library(ggplot2) 
 library(ggpubr)
+library(gtsummary)   
+library(flextable)   
+library(officer)  
+library(forcats)
+library(survival)
 
 ## 1.0) Loading the data sets: 
 ###----------------------------------------------------------------------------------------------------------###
