@@ -404,9 +404,9 @@ Data_CR$stroke_incidence_final <- ifelse(
 
 ## 2.15) Final study population
 
-missing <- Data_CR[is.na(Data_CR$hyplip)| is.na(Data_CR$disability),]
+missing <- is.na(Data_CR$hyplip)
 Data_CVD <- Data_CR[Data_CR$cvd_prevalence != "Prevalent CVD case", ] #Removing prevalent CVD cases
-sample_cvd <- Data_CVD[complete.cases(Data_CVD[, c("hyplip", "disability")]), ]
+sample_cvd <- Data_CVD[complete.cases(Data_CVD[, c("hyplip")]), ]
 
 ## 2.16) Downloading the processed dataset 
 write.csv(sample_cvd, "path.csv")
