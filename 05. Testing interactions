@@ -1,4 +1,4 @@
-## 5.0 ) Cox proportional hazards regression for testing interactions of the SWC profiles with age (categorical variable), sex, and BMI (categorical variable) on the risk of CVD event, . 
+## 5.0 ) Cox proportional hazards regression for testing interactions of the SWC profiles with age, sex, and BMI on the risk of CVD event . 
 
 ###----------------------------------------------------------------------------------------------------------###
   #5.1.0)   -------------------------------## **Cohort study: UK Biobank** ##---------------------------------
@@ -227,3 +227,5 @@ summary(cox_cvd_3_bmi)
 anova(cox_cvd_3_bmi_interaction, cox_cvd_3_bmi, test = "LRT")
 #Testing for the proportional hazard assumption
 ph_test_bmi3 <- cox.zph(cox_cvd_3_bmi_interaction)
+
+#Code using age and BMI as continuous variables is not provided; however, it follows the same structure as the aforementioned code.
