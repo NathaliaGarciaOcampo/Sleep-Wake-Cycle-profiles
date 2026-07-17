@@ -1,5 +1,4 @@
-## 5.0 ) Cox proportional hazards regression for testing interactions of the SWC profiles with age (<70, ≥70 years), sex (female, male), and BMI (<25, 
-203 25-30, ≥30 kg/m²) on the risk of CVD event.
+## 5.0 ) Cox proportional hazards regression for testing interactions of the SWC profiles with age (categorical variable), sex, and BMI (categorical variable) on the risk of CVD event, . 
 
 ###----------------------------------------------------------------------------------------------------------###
   #5.1.0)   -------------------------------## **Cohort study: UK Biobank** ##---------------------------------
