@@ -10,7 +10,7 @@ sample_cvd_sensitivity_nofatal_uk <- sample_cvd_uk[
   !(sample_cvd_uk$cvd_event_uk == 1 & sample_cvd_uk$fatal_CVD_uk == 1),]
 
 ###------------------------------------------------------------------------------------------------------------------------------------------------
-Table S4. Hazard ratios from Cox proportional hazard regression for the association between sleep-wake cycle profiles and incident non-fatal CVD in the UKB accelerometer sub-study.
+Table S5. Hazard ratios from Cox proportional hazard regression for the association between sleep-wake cycle profiles and incident non-fatal CVD in the UKB accelerometer sub-study.
 #Note: The results from these models were used to generate this table, which was formatted separately for publication. This script reproduces the statistical models underlying the reported results.
 
 # 7.2) Cox proportional hazards regression analyses using age as the time scale:
