@@ -1,5 +1,5 @@
 
-## 3.0 ) Descriptive analysis 
+## 3.0 ) Descriptive analysis  :
 
 #Load the preprocessed datasets:
 sample_cvd_uk <- read.csv("path/sample_cvd_uk.csv")
